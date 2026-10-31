@@ -7,23 +7,29 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "check": "astro check",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky"
+    "check": "astro check",
+    "audit:prod": "npm audit --omit=dev --audit-level=high",
+    "verify": "npm run lint && npm run format:check && npm run check && npm run test --if-present && npm run build",
+    "prepare": "husky",
+    "tokens": "node scripts/build-tokens.mjs && prettier --write src/modules/common/styles/tokens.css"
   },
   "dependencies": {
     "@astrojs/node": "^11.1.9",
     "@astrojs/react": "^7.1.2",
+    "@tailwindcss/vite": "^4.3.3",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "astro": "^7.4.4",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
@@ -33,6 +39,7 @@
     "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-astro": "^3.2.1",
+    "eslint-plugin-better-tailwindcss": "^4.10.0",
     "eslint-plugin-jsx-a11y-x": "^0.2.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.13.0",
@@ -40,6 +47,7 @@
     "lint-staged": "^17.6.0",
     "prettier": "^3.9.10",
     "prettier-plugin-astro": "^1.1.2",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.1"
   },

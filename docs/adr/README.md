@@ -23,3 +23,5 @@ ADR adalah catatan singkat tentang **satu keputusan arsitektur**: apa yang diput
 | [0003](0003-auth-strategy-dan-bff.md)       | Auth berbasis strategi dan proxy BFF        | Diterima |
 | [0004](0004-tangga-state-management.md)     | Tangga state management                     | Diterima |
 | [0005](0005-tooling-dasar.md)               | Tooling dasar: npm, Node 24, ESLint 10      | Diterima |
+| [0006](0006-styling-tailwind-v4.md)         | Styling dengan Tailwind CSS v4              | Diterima |
+| [0007](0007-kebijakan-audit-dependency.md)  | Kebijakan audit keamanan dependency         | Diterima |
