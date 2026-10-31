@@ -14,8 +14,8 @@ Baca file ini dulu, lalu README di folder tempat kamu bekerja (`src/pages`, `src
 | `npm run check`                           | `astro check` (typecheck)                                                                               |
 | `npm run test`                            | Vitest (menyusul)                                                                                       |
 | `npm run build`                           | Build produksi                                                                                          |
-| `npm audit --omit=dev`                    | Audit keamanan dependency produksi                                                                      |
-| `npm run verify`                          | Semua cek di atas sekaligus (menyusul)                                                                  |
+| `npm audit:prod`                          | Audit keamanan dependency produksi                                                                      |
+| `npm run verify`                          | Semua cek di atas sekaligus                                                                             |
 | `npm run gen:module <nama>`               | Scaffold modul baru (menyusul)                                                                          |
 
 **Sebelum menyatakan tugas selesai, semua cek harus lolos:** lint, format:check, check, test, build.
