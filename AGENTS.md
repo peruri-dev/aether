@@ -45,6 +45,7 @@ Arah dependency satu arah: `pages` -> `modules/<modul>` -> `modules/common`.
 8. **Env var lewat `astro:env`.** Secret hanya diimpor dari `astro:env/server`, tidak pernah di komponen React.
 9. **Styling dengan Tailwind, nilai hanya dari token.** Token didefinisikan di blok `@theme` pada `modules/common/styles/global.css`. Dilarang arbitrary value seperti `bg-[#ff0000]` atau `p-[13px]`; kalau butuh nilai baru, tambahkan token. Cek `modules/common/components` sebelum membuat komponen baru.
 10. **Halaman baru wajib didaftarkan** di `modules/common/auth/route-permissions.ts`.
+11. **Jangan mengedit `tokens.css` secara manual.** Ubah token di Figma, export ke design-tokens/figma/, lalu jalankan `npm run tokens`.
 
 ## Penamaan
 
