@@ -1,6 +1,7 @@
 /** @type {import("prettier").Config} */
 export default {
   singleQuote: true,
-  plugins: ['prettier-plugin-astro'],
   overrides: [{ files: '*.astro', options: { parser: 'astro' } }],
+  plugins: ['prettier-plugin-astro', 'prettier-plugin-tailwindcss'],
+  tailwindStylesheet: './src/modules/common/styles/global.css',
 };
