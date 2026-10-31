@@ -1,0 +1,584 @@
+{
+  "Primary": {
+    "25": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9647058844566345,
+          0.9764705896377563,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#F6F9FF"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:392:5681",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:db7ec7f6d3be566d73be397e31e7a2665e1986b8/-1:-1",
+          "targetVariableName": "INAgov/Primary/25",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "50": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9372549057006836,
+          0.9607843160629272,
+          0.9921568632125854
+        ],
+        "alpha": 1,
+        "hex": "#EFF5FD"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:392:5674",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:a5c45718898b3bc756598ea51090abe06adb2f0f/-1:-1",
+          "targetVariableName": "INAgov/Primary/50",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "100": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.7529411911964417,
+          0.843137264251709,
+          0.9764705896377563
+        ],
+        "alpha": 1,
+        "hex": "#C0D7F9"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:392:5675",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:1f459c7ef31a0db1fd9514cb8a5036730808d819/-1:-1",
+          "targetVariableName": "INAgov/Primary/100",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "200": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.6313725709915161,
+          0.7686274647712708,
+          0.9607843160629272
+        ],
+        "alpha": 1,
+        "hex": "#A1C4F5"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:392:5676",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:2458012dcab483d37250a9eccdb4225713909b71/-1:-1",
+          "targetVariableName": "INAgov/Primary/200",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "300": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.3843137323856354,
+          0.6117647290229797,
+          0.9372549057006836
+        ],
+        "alpha": 1,
+        "hex": "#629CEF"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:392:5673",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:d1cb940226f3b9ef8bc28a743052b09d06b560d9/-1:-1",
+          "targetVariableName": "INAgov/Primary/300",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "400": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.09803921729326248,
+          0.41960784792900085,
+          0.8039215803146362
+        ],
+        "alpha": 1,
+        "hex": "#196BCD"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:392:5679",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:32b88776e562b4f9f683f10534b623a653a0e3dc/-1:-1",
+          "targetVariableName": "INAgov/Primary/400",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "500": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.03529411926865578,
+          0.33725491166114807,
+          0.7647058963775635
+        ],
+        "alpha": 1,
+        "hex": "#0956C3"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:392:5672",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:3760b75ed86b48e8fae7aa04dd4ea680b998cf9d/-1:-1",
+          "targetVariableName": "INAgov/Primary/500",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "600": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.03921568766236305,
+          0.2823529541492462,
+          0.6235294342041016
+        ],
+        "alpha": 1,
+        "hex": "#0A489F"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:392:5678",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:72d7da3b39faaefbf75b1cd165693461c8780842/-1:-1",
+          "targetVariableName": "INAgov/Primary/600",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "700": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.0313725508749485,
+          0.2078431397676468,
+          0.4588235318660736
+        ],
+        "alpha": 1,
+        "hex": "#083575"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:392:5677",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:82ef9a9e6431f02d7419295a133b3f351b16bd9d/-1:-1",
+          "targetVariableName": "INAgov/Primary/700",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "800": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.007843137718737125,
+          0.16470588743686676,
+          0.35686275362968445
+        ],
+        "alpha": 1,
+        "hex": "#022A5B"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:392:5671",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:c8db542af097f3a010bd158a34e932e87ee98e8b/-1:-1",
+          "targetVariableName": "INAgov/Primary/800",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "900": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.01568627543747425,
+          0.07058823853731155,
+          0.14509804546833038
+        ],
+        "alpha": 1,
+        "hex": "#041225"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:392:5680",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:6e4a95feb436c847d19208262c9f20b678bf8d8f/-1:-1",
+          "targetVariableName": "INAgov/Primary/900",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "Primary": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.09803921729326248,
+          0.41960784792900085,
+          0.8039215803146362
+        ],
+        "alpha": 1,
+        "hex": "#196BCD"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:6014:85996",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:32b88776e562b4f9f683f10534b623a653a0e3dc/-1:-1",
+          "targetVariableName": "INAgov/Primary/400",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    }
+  },
+  "Secondary": {
+    "25": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 0,
+        "hex": "#FFFFFF"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:10638:3125",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:9a2d6fb8526473adfc3f659ffd90f5c9df2a777d/-1:-1",
+          "targetVariableName": "INAgov/Secondary/25",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "50": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 0,
+        "hex": "#FFFFFF"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:10638:3124",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:cfa51794022fda9546fc2d5c699598c1abc49e6e/-1:-1",
+          "targetVariableName": "INAgov/Secondary/50",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "100": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 1,
+        "hex": "#FFFFFF"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:394:1220",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:a3c7d6bd788b6fb1476448a9fd49c5d89d91c25f/-1:-1",
+          "targetVariableName": "INAgov/Secondary/100",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "200": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          0.9607843160629272,
+          0.9333333373069763
+        ],
+        "alpha": 1,
+        "hex": "#FFF5EE"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:394:1222",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:7eb7144ddee86e029b06302eb21773536213672e/-1:-1",
+          "targetVariableName": "INAgov/Secondary/200",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "300": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          0.9098039269447327,
+          0.800000011920929
+        ],
+        "alpha": 1,
+        "hex": "#FFE8CC"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:394:1221",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:c9e2dc102748c148e7b3146708e98570ee310971/-1:-1",
+          "targetVariableName": "INAgov/Secondary/300",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "400": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          0.8235294222831726,
+          0.6509804129600525
+        ],
+        "alpha": 1,
+        "hex": "#FFD2A6"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:394:1223",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:2bc6c1f8ded0bc5d3e5e46b7d3d34a456ea991ea/-1:-1",
+          "targetVariableName": "INAgov/Secondary/400",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "500": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.929411768913269,
+          0.7254902124404907,
+          0.5411764979362488
+        ],
+        "alpha": 1,
+        "hex": "#EDB98A"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:394:1218",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:b09145bdb1319a0218db255c016bfb21d5c1ddca/-1:-1",
+          "targetVariableName": "INAgov/Secondary/500",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "600": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.8274509906768799,
+          0.5882353186607361,
+          0.38823530077934265
+        ],
+        "alpha": 1,
+        "hex": "#D39663"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:394:1217",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:e9efb2ded9da82d1a67f27ebf656ee7d320ac9fa/-1:-1",
+          "targetVariableName": "INAgov/Secondary/600",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "700": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.800000011920929,
+          0.08235294371843338,
+          0.08235294371843338
+        ],
+        "alpha": 1,
+        "hex": "#CC1515"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:394:1219",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:83cd307a00b43be53733f3f0d7b6620a48a6c09e/-1:-1",
+          "targetVariableName": "INAgov/Secondary/700",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "800": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 0,
+        "hex": "#FFFFFF"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:8565:62689",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:072743694060708fe2a055941e8ded5cbc706c5a/-1:-1",
+          "targetVariableName": "INAgov/Secondary/800 (Do Not Use)",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "900": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 0,
+        "hex": "#FFFFFF"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:8565:62690",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:7619842876fb5fbf788de545cd1a103058ef1189/-1:-1",
+          "targetVariableName": "INAgov/Secondary/900 (Do Not Use)",
+          "targetVariableSetId": "VariableCollectionId:6160e1fc1020f7779c53367bd55a8f332bbbec4d/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "INAgov"
+  }
+}
