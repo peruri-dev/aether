@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Boilerplate dashboard / sistem internal: **Astro (adapter Node, on-demand rendering) sebagai shell**, **React sebagai aplikasi**. Astro mengurus routing, layout, middleware auth, dan proxy BFF; seluruh UI interaktif ada di React.
+Boilerplate dashboard / sistem internal: **Astro (adapter Node, on-demand rendering) sebagai shell**, **React sebagai aplikasi**, styling dengan **Tailwind CSS v4**. Astro mengurus routing, layout, middleware auth, dan proxy BFF; seluruh UI interaktif ada di React.
 
 Baca file ini dulu, lalu README di folder tempat kamu bekerja (`src/pages`, `src/modules`, `src/modules/common`).
 
@@ -14,6 +14,7 @@ Baca file ini dulu, lalu README di folder tempat kamu bekerja (`src/pages`, `src
 | `npm run check`                           | `astro check` (typecheck)                                                                               |
 | `npm run test`                            | Vitest (menyusul)                                                                                       |
 | `npm run build`                           | Build produksi                                                                                          |
+| `npm audit --omit=dev`                    | Audit keamanan dependency produksi                                                                      |
 | `npm run verify`                          | Semua cek di atas sekaligus (menyusul)                                                                  |
 | `npm run gen:module <nama>`               | Scaffold modul baru (menyusul)                                                                          |
 
@@ -42,7 +43,7 @@ Arah dependency satu arah: `pages` -> `modules/<modul>` -> `modules/common`.
 6. **Browser hanya memanggil `/api/*` (BFF).** `fetch` langsung hanya di `modules/common/api`.
 7. **Token tidak boleh disentuh dari React.** Tidak ada token di localStorage atau state. Pakai `useCurrentUser()` dan `<Can permission="...">`.
 8. **Env var lewat `astro:env`.** Secret hanya diimpor dari `astro:env/server`, tidak pernah di komponen React.
-9. **Warna dan spacing hanya dari token** (`modules/common/styles/tokens.css`). Cek `modules/common/components` sebelum membuat komponen baru.
+9. **Styling dengan Tailwind, nilai hanya dari token.** Token didefinisikan di blok `@theme` pada `modules/common/styles/global.css`. Dilarang arbitrary value seperti `bg-[#ff0000]` atau `p-[13px]`; kalau butuh nilai baru, tambahkan token. Cek `modules/common/components` sebelum membuat komponen baru.
 10. **Halaman baru wajib didaftarkan** di `modules/common/auth/route-permissions.ts`.
 
 ## Penamaan
@@ -57,6 +58,7 @@ Arah dependency satu arah: `pages` -> `modules/<modul>` -> `modules/common`.
 - Commit dan judul PR mengikuti Conventional Commits, misalnya `feat(user-management): add role filter`.
 - Satu tugas = satu branch = satu PR kecil.
 - Jangan pakai `--force` atau `--legacy-peer-deps` saat install. Kalau ada konflik peer dependency, laporkan.
+- Jangan pernah menjalankan `npm audit fix --force`. Temuan audit di devDependencies dianalisis dulu (lihat ADR-0007), bukan dipaksa.
 - Jangan menambah dependency baru tanpa alasan yang ditulis di deskripsi PR.
 
 ## Batasan
@@ -74,3 +76,4 @@ Arah dependency satu arah: `pages` -> `modules/<modul>` -> `modules/common`.
   - [Astro components](https://docs.astro.build/en/basics/astro-components/)
   - [Framework components (React)](https://docs.astro.build/en/guides/framework-components/)
   - [Styling](https://docs.astro.build/en/guides/styling/)
+- Dokumentasi Tailwind CSS v4: https://tailwindcss.com/docs
