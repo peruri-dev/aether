@@ -20,13 +20,13 @@ Routing Astro. Setiap file di sini adalah satu URL.
 ```astro
 ---
 // src/pages/user-management/index.astro
-import BaseLayout from '@/modules/common/layouts/base-layout.astro';
+import BaseLayout from '@/modules/common/components/base-layout.astro';
 import { TableSkeleton } from '@/modules/common';
 import { UserManagementView } from '@/modules/user-management';
 const { user } = Astro.locals;
 ---
 
-<BaseLayout title="Manajemen Pengguna" user={user}>
+<BaseLayout title="Manajemen Pengguna">
   <UserManagementView client:only="react" user={user}>
     <TableSkeleton slot="fallback" />
   </UserManagementView>
