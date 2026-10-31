@@ -4,14 +4,25 @@ import '@/modules/common/styles/global.css';
 interface Props {
   title?: string;
   className?: string;
+  dataBrand?: string;
+  dataTheme?: 'light' | 'dark';
 }
 
-const { title = 'Aether | Opinionated Boilerplate', className = '' } =
-  Astro.props;
+const {
+  title = 'Aether | Opinionated Boilerplate',
+  className = '',
+  dataBrand,
+  dataTheme = 'light',
+} = Astro.props;
 ---
 
 <!doctype html>
-<html lang="id" class="antialiased">
+<html
+  lang="id"
+  class="antialiased"
+  data-brand={dataBrand}
+  data-theme={dataTheme}
+>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

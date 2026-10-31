@@ -17,7 +17,8 @@
     "check": "astro check",
     "audit:prod": "npm audit --omit=dev --audit-level=high",
     "verify": "npm run lint && npm run format:check && npm run check && npm run test --if-present && npm run build",
-    "prepare": "husky"
+    "prepare": "husky",
+    "tokens": "node scripts/build-tokens.mjs && prettier --write src/modules/common/styles/tokens.css"
   },
   "dependencies": {
     "@astrojs/node": "^11.1.9",
