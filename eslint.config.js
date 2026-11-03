@@ -47,5 +47,44 @@ export default defineConfig([
       'better-tailwindcss/enforce-consistent-line-wrapping': 'off',
     },
   },
+  {
+    files: ['src/**/*.{ts,tsx,astro}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                '@/modules/*/*',
+                '!@/modules/common/**',
+                '!@/modules/*/server',
+              ],
+              message:
+                'Impor modul lain lewat @/modules/<nama>. Di dalam modul sendiri pakai path relatif.',
+            },
+          ],
+        },
+      ],
+      'import/no-cycle': 'error',
+    },
+  },
+  {
+    files: ['src/**/*.tsx'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@/modules/*/*', '!@/modules/common/**'],
+              message:
+                'Impor modul lain lewat @/modules/<nama>. Kode */server tidak boleh dipakai di React.',
+            },
+          ],
+        },
+      ],
+    },
+  },
   prettier,
 ]);

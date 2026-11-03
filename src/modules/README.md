@@ -1,42 +1,61 @@
 # src/modules
 
-Satu folder = satu modul bisnis (screaming architecture). Nama folder adalah nama domain dalam kebab-case, misalnya `user-management`, `vendor`, `report`.
+Satu folder = satu modul bisnis (screaming architecture), nama kebab-case: `users`, `projects`, `reports`.
+`common/` adalah modul khusus untuk kode lintas modul tanpa istilah domain. Aturan lengkap: `docs/CONVENTIONS.md` bagian A, B, E.
 
-`common/` adalah modul khusus untuk kode yang dipakai lintas modul. Lihat `common/README.md`.
-
-## Anatomi modul
+## Anatomi modul [A2]
 
 ```
-user-management/
-  api/          client, adapter (Zod -> tipe frontend), query keys, mutations
-  components/   komponen modul ini, termasuk view per halaman
-                  user-management-view.tsx
-                  user-management-table.tsx
-  hooks/        use-user-management.ts, use-user-mutations.ts
-  schemas/      schema Zod untuk form dan respons API
+projects/
+  components/   project-detail-view.tsx, project-table.tsx, project-form-dialog.tsx
+  services/     fetch-projects.ts, fetch-project-by-id.ts, submit-project.ts
+  hooks/        use-project-filters.ts
+  schemas/      project.schema.ts
+  types/        project.ts
+  constants/    project-status.ts
+  utils/        format-project-code.ts
   mocks/        handler MSW + fixtures
-  types.ts
-  index.ts      public API: hanya yang boleh dipakai dari luar
-  README.md     keputusan khusus modul ini (opsional)
+  index.ts      public API modul (aman untuk browser)
+  server.ts     public API khusus server: prefetch untuk .astro dan api/ (opsional)
 ```
 
-Tidak semua subfolder wajib ada; buat sesuai kebutuhan.
+Minimal `components/` dan `services/`; sisanya dibuat sesuai kebutuhan.
 
-## Penamaan
+## Impor [A3] (ADR-0008)
 
-- Semua file dan folder: **kebab-case**.
-- Nama di dalam kode tetap mengikuti konvensi JS/TS: komponen PascalCase, hook dan fungsi camelCase.
-  - `user-management-view.tsx` mengekspor `UserManagementView`
-  - `use-user-management.ts` mengekspor `useUserManagement`
-- Komponen yang di-mount oleh `src/pages` diberi akhiran `-view`.
+| Dari                         | Ke                    | Cara                                                    |
+| ---------------------------- | --------------------- | ------------------------------------------------------- |
+| Mana pun                     | `common`              | Langsung per file: `@/modules/common/components/button` |
+| Modul lain atau `src/pages`  | Modul ini             | Hanya lewat `@/modules/<modul>`                         |
+| Di dalam modul sendiri       | —                     | Path relatif: `../services/fetch-projects`              |
+| `.astro` dan `src/pages/api` | Kode server modul ini | `@/modules/<modul>/server` (dilarang dari `.tsx`)       |
 
-## Aturan
+```ts
+// src/modules/users/index.ts
+// Named export saja, tanpa `export *`, hanya kode yang aman untuk browser.
+export { default as UsersView } from './components/users-view';
+export { default as UserAvatar } from './components/user-avatar';
+export { fetchUserById } from './services/fetch-user-by-id';
+export type { User, UserRole } from './types/user';
+```
 
-- Boleh import dari `@/modules/common`. **Tidak boleh** import dari modul lain kecuali lewat `index.ts`-nya.
-- Bentuk respons backend tidak boleh bocor ke komponen: selalu lewat adapter di `api/`.
-- Filter, sort, dan pagination disimpan di URL.
-- Modul baru dibuat dengan `npm run gen:module <nama>` lalu meniru golden module.
+## Kapan naik ke `common`? [A4]
 
-## Kapan sesuatu pindah ke common?
+Tanyakan: _apakah kode ini masuk akal di aplikasi dengan domain lain?_
 
-Hanya kalau dipakai oleh **dua modul atau lebih**. Sebelum itu, biarkan di dalam modul.
+- Ya, dan dipakai dua modul atau lebih → pindahkan ke `common` sekarang.
+- Tidak (mengandung aturan domain) → tetap di modul pemilik, ekspor lewat `index.ts`.
+- **Jangan pernah menyalin** kode antar modul.
+
+## Penamaan [B]
+
+- File: kebab-case. Komponen PascalCase, hook dan fungsi camelCase di dalam kode.
+- Komponen: akhiran peran (`-view`, `-dialog`, `-form`, `-table`, `-list`, `-item`, `-card`, `-filter`).
+- Service: `<kata-kerja>-<resource>.ts` (`fetch-` untuk membaca).
+- Schema: `<subjek>.schema.ts`; tipe form dari `z.infer`.
+- Komponen modul: `export default function`, props `Readonly<<Nama>Props>`, return `React.ReactNode`.
+
+## Data [E]
+
+- Komponen → service → `fetch('/api/...')`. Tanpa token, tanpa `fetch` ke backend langsung.
+- State dengan `useState`; filter, sort, pagination di URL. Jangan tambah library state tanpa ADR.
