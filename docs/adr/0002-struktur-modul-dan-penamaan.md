@@ -1,6 +1,6 @@
 # ADR-0002: Struktur modul dan penamaan kebab-case
 
-- Status: Diterima
+- Status: Diterima; bagian impor antar modul digantikan oleh ADR-0008
 - Tanggal: 2026-10-31
 
 ## Konteks

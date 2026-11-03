@@ -1,6 +1,6 @@
 # ADR-0004: Tangga state management
 
-- Status: Diterima
+- Status: Diusulkan (sebelumnya Diterima). Diterima kembali setelah golden module membuktikan TanStack Query; sampai saat itu ikuti CONVENTIONS [E4].
 - Tanggal: 2026-10-31
 
 ## Konteks

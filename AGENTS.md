@@ -2,7 +2,7 @@
 
 Boilerplate dashboard / sistem internal: **Astro (adapter Node, on-demand rendering) sebagai shell**, **React sebagai aplikasi**, styling dengan **Tailwind CSS v4**. Astro mengurus routing, layout, middleware auth, dan proxy BFF; seluruh UI interaktif ada di React.
 
-Baca file ini dulu, lalu README di folder tempat kamu bekerja (`src/pages`, `src/modules`, `src/modules/common`).
+Baca file ini dulu, lalu `docs/CONVENTIONS.md` (aturan lengkap dengan ID seperti `[C2]`), lalu README di folder tempat kamu bekerja.
 
 ## Perintah
 
@@ -14,7 +14,8 @@ Baca file ini dulu, lalu README di folder tempat kamu bekerja (`src/pages`, `src
 | `npm run check`                           | `astro check` (typecheck)                                                                               |
 | `npm run test`                            | Vitest (menyusul)                                                                                       |
 | `npm run build`                           | Build produksi                                                                                          |
-| `npm audit:prod`                          | Audit keamanan dependency produksi                                                                      |
+| `npm run audit:prod`                      | Audit keamanan dependency produksi                                                                      |
+| `npm run tokens`                          | Generate `tokens.css` dari export Figma                                                                 |
 | `npm run verify`                          | Semua cek di atas sekaligus                                                                             |
 | `npm run gen:module <nama>`               | Scaffold modul baru (menyusul)                                                                          |
 
@@ -26,9 +27,9 @@ Baca file ini dulu, lalu README di folder tempat kamu bekerja (`src/pages`, `src
 src/
   pages/            routing Astro + endpoint api/ (BFF). Tipis, tanpa logika bisnis
   modules/
-    common/         dipakai lintas modul: components, styles, layouts, providers, api, auth, lib
-    <nama-modul>/   satu modul bisnis: api, components, hooks, schemas, mocks, index.ts
-  middleware.ts     cek sesi + permission sebelum halaman dirender
+    common/         dipakai lintas modul: components, hooks, services, utils, styles, layouts, auth
+    <nama-modul>/   satu modul bisnis: components, services, hooks, schemas, types, constants, utils, mocks, index.ts
+  middleware/       cek sesi + permission sebelum halaman dirender
 ```
 
 Arah dependency satu arah: `pages` -> `modules/<modul>` -> `modules/common`.
@@ -37,15 +38,14 @@ Arah dependency satu arah: `pages` -> `modules/<modul>` -> `modules/common`.
 
 1. **`.astro` hanya untuk routing, layout, dan meneruskan data server.** Tidak ada logika bisnis.
 2. **Satu halaman = satu island:** `client:only="react"` dengan slot `fallback` berisi skeleton.
-3. **Antar modul hanya lewat `index.ts`.** Dilarang deep import ke dalam modul lain. `common` tidak boleh import dari modul atau `pages`.
-4. **Data server lewat TanStack Query**, bukan disimpan di state global. Respons backend divalidasi Zod dan dipetakan lewat adapter di `api/`; bentuk respons backend tidak boleh bocor ke komponen.
+3. **Impor antar modul hanya lewat `@/modules/<modul>` (`index.ts`).** Dilarang deep import ke modul lain dan dilarang menyalin kode antar modul. `common` diimpor langsung per file dan tidak boleh import dari modul atau `pages`. Di dalam modul sendiri pakai path relatif. (ADR-0008)
+4. **Data:** komponen → service modul (`services/`) → `/api/*`. Data awal di-prefetch di `.astro` dan dioper sebagai props; state memakai `useState`. Jangan menambah library state (Redux, Zustand, TanStack Query) tanpa ADR (ADR-0004 berstatus Diusulkan).
 5. **Filter, sort, pagination, dan tab disimpan di URL.**
-6. **Browser hanya memanggil `/api/*` (BFF).** `fetch` langsung hanya di `modules/common/api`.
-7. **Token tidak boleh disentuh dari React.** Tidak ada token di localStorage atau state. Pakai `useCurrentUser()` dan `<Can permission="...">`.
+6. **Browser hanya memanggil `/api/*` (BFF).** Komponen dan hook tidak pernah `fetch` ke jaringan langsung; itu tugas service modul.
+7. **Token tidak boleh disentuh dari React.** Token tidak dioper sebagai props, tidak di localStorage atau state. Endpoint `/api/*` membaca cookie sendiri dan mengurus refresh. Pakai `useCurrentUser()` dan `<Can permission="...">`.
 8. **Env var lewat `astro:env`.** Secret hanya diimpor dari `astro:env/server`, tidak pernah di komponen React.
-9. **Styling dengan Tailwind, nilai hanya dari token.** Token didefinisikan di blok `@theme` pada `modules/common/styles/global.css`. Dilarang arbitrary value seperti `bg-[#ff0000]` atau `p-[13px]`; kalau butuh nilai baru, tambahkan token. Cek `modules/common/components` sebelum membuat komponen baru.
-10. **Halaman baru wajib didaftarkan** di `modules/common/auth/route-permissions.ts`.
-11. **Jangan mengedit `tokens.css` secara manual.** Ubah token di Figma, export ke design-tokens/figma/, lalu jalankan `npm run tokens`.
+9. **Styling dengan Tailwind, nilai hanya dari token.** Token di-generate dari Figma ke `modules/common/styles/tokens.css`; utamakan token semantic (`background-*`, `content-*`, `stroke-*`), lalu `brand-*`. Dilarang arbitrary value seperti `bg-[#ff0000]` atau `p-[13px]`; kalau butuh nilai baru, tambahkan token. Cek `modules/common/components` sebelum membuat komponen baru.
+10. **Halaman baru wajib didaftarkan** di `modules/common/auth/route-permissions.ts`, dan semua navigasi memakai konstanta rute dari sana, bukan string literal.
 
 ## Penamaan
 
@@ -64,12 +64,15 @@ Arah dependency satu arah: `pages` -> `modules/<modul>` -> `modules/common`.
 
 ## Batasan
 
-- Jangan mengubah alur auth (`modules/common/auth`, `src/middleware.ts`, `src/pages/api`) kecuali tugasnya memang tentang auth.
+- Jangan mengubah alur auth (`modules/common/auth`, `src/middleware/`, `src/pages/api`) kecuali tugasnya memang tentang auth.
 - Jangan melonggarkan aturan lint atau TypeScript untuk membuat cek lolos. Perbaiki kodenya.
+- Jangan mengedit `src/modules/common/styles/tokens.css` secara manual. Ubah di Figma, export ke `design-tokens/figma/`, lalu jalankan `npm run tokens`.
+- Saat memindahkan komponen dari project lama, jalankan `scripts/migrate-legacy-colors.mjs` dan laporkan item berstatus review.
 - Kalau requirement ambigu atau bertentangan dengan aturan di sini, tanyakan dulu.
 
 ## Referensi
 
+- Konvensi lengkap: `docs/CONVENTIONS.md`
 - Keputusan arsitektur: `docs/adr/`
 - Skills: `.claude/skills/` (menyusul)
 - Dokumentasi Astro: https://docs.astro.build
