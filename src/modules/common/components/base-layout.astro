@@ -1,17 +1,16 @@
 ---
 import '@/modules/common/styles/global.css';
+import { PUBLIC_BRAND } from 'astro:env/client';
 
 interface Props {
   title?: string;
   className?: string;
-  dataBrand?: string;
   dataTheme?: 'light' | 'dark';
 }
 
 const {
   title = 'Aether | Opinionated Boilerplate',
   className = '',
-  dataBrand,
   dataTheme = 'light',
 } = Astro.props;
 ---
@@ -20,7 +19,7 @@ const {
 <html
   lang="id"
   class="antialiased"
-  data-brand={dataBrand}
+  data-brand={PUBLIC_BRAND}
   data-theme={dataTheme}
 >
   <head>

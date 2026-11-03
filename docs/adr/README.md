@@ -16,13 +16,14 @@ ADR adalah catatan singkat tentang **satu keputusan arsitektur**: apa yang diput
 
 ## Daftar
 
-| No                                          | Judul                                       | Status                                 |
-| ------------------------------------------- | ------------------------------------------- | -------------------------------------- |
-| [0001](0001-astro-shell-react-app.md)       | Astro sebagai shell, React sebagai aplikasi | Diterima                               |
-| [0002](0002-struktur-modul-dan-penamaan.md) | Struktur modul dan penamaan kebab-case      | Diterima, sebagian digantikan ADR-0008 |
-| [0003](0003-auth-strategy-dan-bff.md)       | Auth berbasis strategi dan proxy BFF        | Diterima                               |
-| [0004](0004-tangga-state-management.md)     | Tangga state management                     | Diusulkan                              |
-| [0005](0005-tooling-dasar.md)               | Tooling dasar: npm, Node 24, ESLint 10      | Diterima                               |
-| [0006](0006-styling-tailwind-v4.md)         | Styling dengan Tailwind CSS v4              | Diterima                               |
-| [0007](0007-kebijakan-audit-dependency.md)  | Kebijakan audit keamanan dependency         | Diterima                               |
-| [0008](0008-public-api-modul.md)            | Public API modul lewat `index.ts`           | Diterima                               |
+| No                                          | Judul                                         | Status                                 |
+| ------------------------------------------- | --------------------------------------------- | -------------------------------------- |
+| [0001](0001-astro-shell-react-app.md)       | Astro sebagai shell, React sebagai aplikasi   | Diterima                               |
+| [0002](0002-struktur-modul-dan-penamaan.md) | Struktur modul dan penamaan kebab-case        | Diterima, sebagian digantikan ADR-0008 |
+| [0003](0003-auth-strategy-dan-bff.md)       | Auth berbasis strategi dan proxy BFF          | Diterima                               |
+| [0004](0004-tangga-state-management.md)     | Tangga state management                       | Diusulkan                              |
+| [0005](0005-tooling-dasar.md)               | Tooling dasar: npm, Node 24, ESLint 10        | Diterima                               |
+| [0006](0006-styling-tailwind-v4.md)         | Styling dengan Tailwind CSS v4                | Diterima                               |
+| [0007](0007-kebijakan-audit-dependency.md)  | Kebijakan audit keamanan dependency           | Diterima                               |
+| [0008](0008-public-api-modul.md)            | Public API modul lewat `index.ts`             | Diterima                               |
+| [0009](0009-brand-dan-spacing.md)           | Pemilihan brand per project dan skala spacing | Diterima                               |

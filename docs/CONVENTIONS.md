@@ -61,7 +61,7 @@ src/modules/<modul>/
 
 **[B6] Komponen modul:** `export default function`, props `interface <Nama>Props` dipakai sebagai `Readonly<<Nama>Props>`, return type `React.ReactNode`.
 
-**[B7] Primitif di `common/components`:** named export, mengekspor varian dan tipe props (`export { Button, buttonVariants, type ButtonProps }`).
+**[B7] Primitif di `common/components`:** named export, mengekspor varian dan tipe props (`export { Button, buttonVariants, type ButtonProps }`). Proyek memakai React 19, jadi **`ref` diterima sebagai props biasa; jangan memakai `forwardRef`** di kode baru. Saat porting komponen lama, `forwardRef` dan `displayName`-nya dilepas.
 
 **[B8] Nama props selalu `<NamaKomponen>Props`**, tidak pernah `Props` generik.
 
@@ -98,6 +98,8 @@ src/modules/<modul>/
 
 **[E2] Token hanya di server (ADR-0003).** Endpoint `/api/*` membaca token dari cookie `httpOnly` lewat `context.cookies`, menempelkannya ke request backend, dan menangani refresh token. Service di sisi React cukup `fetch('/api/...')` tanpa token. _Diubah dari project acuan_, yang dulu menyimpan dan me-refresh token di klien.
 
+**[E2a] Masa berlaku tidak di-hardcode.** Umur cookie diambil dari respons backend (`expires_in` atau klaim `exp` di token), bukan angka tetap. Project acuan memakai access token 15 menit dan refresh token 48 jam, tapi project lain bisa berbeda, bahkan memakai session atau OAuth; semua perbedaan itu ditangani di implementasi `AuthStrategy` (ADR-0003), tidak di modul fitur. Saat refresh token habis, arahkan ke login dengan `returnTo`.
+
 **[E3] Kontrak respons seragam:** `BackendResponse<T> = { data, message, code, requestId? }`, dibuat lewat helper `dataResponse` / `errorResponse`.
 
 **[E4] State (ADR-0004 berstatus Diusulkan).** Untuk saat ini ikuti project acuan:
@@ -114,7 +116,7 @@ src/modules/<modul>/
 
 **[F1] Setiap form memakai `react-hook-form` + `zodResolver`** dengan schema di `schemas/`. Validasi tidak ditulis manual di komponen.
 
-**[F2] Pesan validasi:** _belum diputuskan_ (lihat Pertanyaan terbuka). Sampai diputuskan, ikuti gaya yang sudah ada di modul yang sedang dikerjakan.
+**[F2] Pesan validasi bilingual inline** dengan helper `text('Indonesia', 'English')` dari `common/utils`, ditulis langsung di schema. Gaya kunci `zMessage('...')` tidak dipakai; schema lama yang memakainya dikonversi saat porting.
 
 ## G. Error dan navigasi
 
@@ -155,7 +157,12 @@ src/modules/<modul>/
 
 ---
 
-## Pertanyaan terbuka
+## Keputusan terkait
 
-- **[F2] Pesan validasi:** inline `text('ID', 'EN')` atau kunci `zMessage('...')`? Kalau aplikasi hanya pernah dua bahasa, inline cukup; kalau ada potensi bahasa lain atau teks dikelola terpisah, pakai kunci.
-- **[B7] `forwardRef`:** tergantung versi React. Di React 19, `ref` sudah bisa diterima sebagai props biasa, jadi primitif baru tidak perlu `forwardRef`.
+- **Spacing:** skala bawaan Tailwind (kelipatan 4px). Angka Figma dibagi 4: padding 16 → `p-4`. Lihat `design-tokens/README.md`. (ADR-0009)
+- **Brand per project:** dipilih lewat env `PUBLIC_BRAND` (`astro:env`), dipasang sebagai `data-brand` di `<html>` oleh `base-layout.astro`. (ADR-0009)
+
+## Ditunda
+
+- **Pertanyaan untuk tim desain** (warna brand lama, Content/Disabled, oranye warning, kontras Content/Positive, Stroke/Tertiary dark, INAgov Secondary transparan, Secondary brand Neutral). Sementara ikuti `design-tokens/migration/legacy-color-map.json`; item berstatus review tetap dicek visual.
+- **Rilis otomatis (release-please):** menunggu persetujuan PAT. Commit tetap wajib Conventional Commits supaya changelog bisa di-generate penuh dari riwayat saat diaktifkan.

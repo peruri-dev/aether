@@ -8,4 +8,10 @@ export const envSchema = {
     default: 'development',
   }),
   API_BASE_URL: envField.string({ context: 'server', access: 'secret' }),
+  PUBLIC_BRAND: envField.enum({
+    context: 'client',
+    access: 'public',
+    values: ['neutral', 'bgn', 'bkn', 'inagov', 'lan', 'panrb'],
+    default: 'neutral',
+  }),
 };
