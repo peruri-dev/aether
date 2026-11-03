@@ -10,7 +10,7 @@ Aturan yang bisa dicek mesin dipaksakan lewat ESLint; jangan melonggarkan lint u
 
 ## A. Struktur
 
-**[A1] Satu modul = satu folder.** Semua kode fitur ada di `src/modules/<modul>/`. Tidak ada folder global `src/components`, `src/utils`, atau sejenisnya. `src/` hanya berisi `pages/`, `modules/`, dan `middleware/`.
+**[A1] Satu modul = satu folder.** Semua kode fitur ada di `src/modules/<modul>/`. Tidak ada folder global `src/components`, `src/utils`, atau sejenisnya. `src/` hanya berisi `pages/`, `modules/`, `middleware/`, dan `env.schema.ts`. Test endpoint dan file setup test ada di `tests/` di root repo [I2].
 
 **[A2] Anatomi modul.** Subfolder dibuat sesuai kebutuhan; minimal `components/` dan `services/`.
 
@@ -45,11 +45,13 @@ src/modules/<modul>/
 
 **[A5] Halaman sejajar dengan modul.** `src/pages/<modul>/` memetakan ke `src/modules/<modul>/` dengan nama yang sama.
 
-**[A6] Endpoint BFF.** Satu folder per resource di `src/pages/api/<resource>/`, file entry `index.ts`.
+**[A6] Endpoint BFF.** Satu folder per resource di `src/pages/api/<resource>/`, file entry `index.ts`. Semua halaman dan endpoint di-render on-demand (`output: 'server'` di `astro.config`); halaman yang memang statis menulis `export const prerender = true` secara eksplisit.
+
+**[A7] Endpoint health.** `GET /api/health` mengembalikan `{ status: 'ok' }` tanpa memanggil backend, terdaftar sebagai rute publik di middleware, dan dipakai healthcheck Docker.
 
 ## B. Penamaan
 
-**[B1] Semua file dan folder kebab-case**, dipaksakan `unicorn/filename-case`. Di dalam kode tetap PascalCase untuk komponen dan camelCase untuk fungsi dan hook.
+**[B1] Semua file dan folder kebab-case**, dipaksakan `unicorn/filename-case`. Pengecualian: file route dinamis Astro (`[id].astro`, `[...path].ts`). Di dalam kode tetap PascalCase untuk komponen dan camelCase untuk fungsi dan hook.
 
 **[B2] Akhiran peran komponen:** `-view` (di-mount halaman), `-dialog`, `-form`, `-table`, `-list`, `-item`, `-card`, `-filter`, `-bar`, `-layout`, `-step`.
 
@@ -89,6 +91,7 @@ src/modules/<modul>/
 - Dilarang arbitrary value (`bg-[#…]`, `p-[13px]`) dan hex di `style`.
 - Satu-satunya pengecualian: kode canvas (misalnya Konva), yang membaca nilai dari variabel CSS token, bukan hex.
 - Komponen hasil porting dari project lama wajib melewati `scripts/migrate-legacy-colors.mjs`.
+- `tokens.css` di-generate dari `design-tokens/figma/` dengan `npm run tokens` dan **tidak boleh diedit manual**. Perubahan JSON token dan `tokens.css` hasil generate di-commit dalam PR yang sama; CI memeriksa keduanya sinkron.
 
 **[D5] Ukuran file:** komponen idealnya di bawah 300 baris (ESLint `max-lines`, warn). Pecah per section atau langkah ke komponen anak.
 
@@ -138,9 +141,18 @@ src/modules/<modul>/
 
 **[I1] Gerbang kualitas:** `npm run verify` (lint, format, `astro check`, test, build) wajib lolos sebelum tugas dinyatakan selesai. Lint tidak dijalankan di dalam `npm run build`; itu tugas `verify` dan CI.
 
-**[I2] Test:** Vitest untuk unit dan komponen, Playwright untuk alur kritis. Project acuan belum punya test; boilerplate menambahkannya sejak awal.
+**[I2] Test:** Vitest + Testing Library (jsdom) untuk unit dan komponen, Playwright untuk alur kritis (menyusul). Project acuan belum punya test; boilerplate menambahkannya sejak awal.
 
-**[I3] Aturan ESLint yang tidak boleh dilonggarkan:** `no-explicit-any` (error), `no-non-null-assertion` (error), `explicit-function-return-type` (warn, `allowExpressions`), `consistent-type-imports`, `import/order` alfabetis bergrup, `react/no-array-index-key`, `no-console` (kecuali `warn` dan `error`).
+- Test kode modul diletakkan berdampingan dengan file aslinya: `src/modules/<modul>/utils/format-name.test.ts`.
+- **Jangan pernah menaruh file test di `src/pages/`.** Astro memperlakukan setiap file di sana sebagai route, sehingga test akan ikut menjadi endpoint. Test endpoint diletakkan di `tests/api/`.
+- File setup test ada di `tests/setup/`.
+
+**[I3] Aturan ESLint yang tidak boleh dilonggarkan:** `no-explicit-any` (error), `no-non-null-assertion` (error), `explicit-function-return-type` (warn, `allowExpressions`), `consistent-type-imports`, `import-x/order` alfabetis bergrup, `import-x/no-cycle`, `no-console` (kecuali `warn` dan `error`).
+
+- `no-console` hanya berlaku untuk `src/`. Script CLI di `scripts/` memang mencetak ke konsol.
+- `react/no-array-index-key` menyusul: plugin resminya belum mendukung ESLint 10.
+
+**[I4] Dependency:** jangan install dengan `--force` atau `--legacy-peer-deps`, dan jangan menjalankan `npm audit fix --force`. Konflik peer dependency dilaporkan dan dicari jalan keluarnya. Gerbang audit di CI hanya untuk dependency produksi (`npm run audit:prod`, ADR-0007). Dependency memakai range eksplisit, bukan `*`.
 
 ## J. Anti-pattern
 
@@ -154,15 +166,38 @@ src/modules/<modul>/
 | J6  | String literal rute                                                        | Konstanta rute [G4]                                                   |
 | J7  | Token di props React, localStorage, atau state                             | Cookie `httpOnly` + BFF [E2]                                          |
 | J8  | Barrel di dalam subfolder modul, `utils/common/`, folder `schema/` tunggal | Struktur [A2]                                                         |
+| J9  | File test di `src/pages/`                                                  | `tests/api/` [I2]                                                     |
+| J10 | Mengedit `tokens.css` secara manual                                        | Ubah di Figma → `npm run tokens` [D4]                                 |
+| J11 | `NODE_ENV` atau `process.env` untuk konfigurasi aplikasi                   | `astro:env` [K1, K3]                                                  |
+
+## K. Environment dan deployment
+
+**[K1] Env hanya lewat `astro:env`** dengan schema di `src/env.schema.ts`. Jangan membaca `process.env` atau `import.meta.env.<NAMA>` untuk variabel aplikasi.
+
+**[K2] Kapan nilai dibaca:**
+
+- `access: 'secret'` dibaca saat runtime. Dipakai untuk **semua nilai yang berbeda per environment** (URL backend, API key, strategi auth), termasuk yang sebenarnya tidak rahasia, supaya satu image bisa dipakai di dev, staging, dan production.
+- `access: 'public'` di-inline saat build. Hanya untuk nilai yang tetap per build, misalnya `PUBLIC_BRAND`.
+
+**[K3] Jangan mendefinisikan `NODE_ENV`** di schema; Astro dan Vite yang mengaturnya. Untuk cek mode, pakai `import.meta.env.DEV` atau `import.meta.env.PROD`.
+
+**[K4] Menambah variabel env:** tambahkan di `env.schema.ts` dan `.env.example` dalam PR yang sama, lalu jalankan `npx astro sync` (atau restart dev server) supaya tipenya terbaca. `.env` tidak pernah di-commit.
+
+**[K5] Docker:**
+
+- Satu image per brand: `PUBLIC_BRAND` dikirim sebagai build arg. Nilai runtime dikirim lewat environment variable saat container dijalankan.
+- Image mendengarkan `HOST=0.0.0.0`, port `4321`, dengan healthcheck ke `/api/health` [A7].
+- Versi Node di `FROM` pada `Dockerfile` harus sama dengan `.nvmrc`. `.npmrc` (`engine-strict=true`) ikut disalin ke image.
 
 ---
 
 ## Keputusan terkait
 
 - **Spacing:** skala bawaan Tailwind (kelipatan 4px). Angka Figma dibagi 4: padding 16 → `p-4`. Lihat `design-tokens/README.md`. (ADR-0009)
-- **Brand per project:** dipilih lewat env `PUBLIC_BRAND` (`astro:env`), dipasang sebagai `data-brand` di `<html>` oleh `base-layout.astro`. (ADR-0009)
+- **Brand per project:** ditentukan **saat build** lewat `PUBLIC_BRAND` (`astro:env`, build arg di Docker), dipasang sebagai `data-brand` di `<html>` oleh `base-layout.astro`. (ADR-0009)
 
 ## Ditunda
 
 - **Pertanyaan untuk tim desain** (warna brand lama, Content/Disabled, oranye warning, kontras Content/Positive, Stroke/Tertiary dark, INAgov Secondary transparan, Secondary brand Neutral). Sementara ikuti `design-tokens/migration/legacy-color-map.json`; item berstatus review tetap dicek visual.
-- **Rilis otomatis (release-please):** menunggu persetujuan PAT. Commit tetap wajib Conventional Commits supaya changelog bisa di-generate penuh dari riwayat saat diaktifkan.
+- **Rilis otomatis (release-please):** menunggu persetujuan PAT; workflow sementara hanya bisa dijalankan manual. Commit tetap wajib Conventional Commits supaya changelog bisa di-generate penuh dari riwayat saat diaktifkan.
+- **`react/no-array-index-key`:** menunggu plugin React yang mendukung ESLint 10 [I3].
