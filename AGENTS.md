@@ -12,7 +12,7 @@ Baca file ini dulu, lalu `docs/CONVENTIONS.md` (aturan lengkap dengan ID seperti
 | `npm run lint`                            | ESLint                                                                                                  |
 | `npm run format` / `npm run format:check` | Prettier                                                                                                |
 | `npm run check`                           | `astro check` (typecheck)                                                                               |
-| `npm run test`                            | Vitest (menyusul)                                                                                       |
+| `npm run test`                            | Vitest                                                                                                  |
 | `npm run build`                           | Build produksi                                                                                          |
 | `npm run audit:prod`                      | Audit keamanan dependency produksi                                                                      |
 | `npm run tokens`                          | Generate `tokens.css` dari export Figma                                                                 |
