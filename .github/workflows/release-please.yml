@@ -1,8 +1,9 @@
+# DITUNDA: menunggu persetujuan PAT (RELEASE_PLEASE_TOKEN).
+# Setelah PAT disimpan sebagai secret, kembalikan trigger ke push ke main.
 name: Release Please
 
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
