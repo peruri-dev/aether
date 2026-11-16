@@ -46,6 +46,7 @@ Arah dependency satu arah: `pages` -> `modules/<modul>` -> `modules/common`.
 8. **Env var lewat `astro:env`.** Secret hanya diimpor dari `astro:env/server`, tidak pernah di komponen React.
 9. **Styling dengan Tailwind, nilai hanya dari token.** Token di-generate dari Figma ke `modules/common/styles/tokens.css`; utamakan token semantic (`background-*`, `content-*`, `stroke-*`), lalu `brand-*`. Dilarang arbitrary value seperti `bg-[#ff0000]` atau `p-[13px]`; kalau butuh nilai baru, tambahkan token. Cek `modules/common/components` sebelum membuat komponen baru.
 10. **Halaman baru wajib didaftarkan** di `modules/common/auth/route-permissions.ts`, dan semua navigasi memakai konstanta rute dari sana, bukan string literal.
+11. **UI Contract:** saat menyentuh elemen bisnis (aksi, input, pesan, container), tambahkan `data-testid` yang belum ada sesuai skill `ui-contract`. Jangan ubah atau hapus `data-testid` yang sudah ada.
 
 ## Penamaan
 
@@ -74,7 +75,7 @@ Arah dependency satu arah: `pages` -> `modules/<modul>` -> `modules/common`.
 
 - Konvensi lengkap: `docs/CONVENTIONS.md`
 - Keputusan arsitektur: `docs/adr/`
-- Skills: `.claude/skills/` (menyusul)
+- Skills: `.claude/skills/` (tersedia: `ui-contract`)
 - Dokumentasi Astro: https://docs.astro.build
   - [Routing, dynamic routes, middleware](https://docs.astro.build/en/guides/routing/)
   - [Astro components](https://docs.astro.build/en/basics/astro-components/)
