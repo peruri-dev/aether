@@ -75,7 +75,7 @@ Arah dependency satu arah: `pages` -> `modules/<modul>` -> `modules/common`.
 
 - Konvensi lengkap: `docs/CONVENTIONS.md`
 - Keputusan arsitektur: `docs/adr/`
-- Skills: `.claude/skills/` (tersedia: `ui-contract`)
+- Skills: `.agents/skills/` (daftar di bagian Skills)
 - Dokumentasi Astro: https://docs.astro.build
   - [Routing, dynamic routes, middleware](https://docs.astro.build/en/guides/routing/)
   - [Astro components](https://docs.astro.build/en/basics/astro-components/)

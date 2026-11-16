@@ -3,6 +3,8 @@
 Boilerplate untuk dashboard dan sistem internal: **Astro** (adapter Node, on-demand rendering) sebagai shell — routing, layout, middleware auth, dan proxy BFF — dengan **React** sebagai aplikasi dan **Tailwind CSS v4** untuk styling. Satu codebase untuk banyak instansi: brand ditentukan lewat env saat build, dan token warna di-generate dari Figma.
 
 > **Status: v0.1.0 — rilis fondasi.** Yang tersedia baru fondasi teknis. Auth, layout shell, dan modul contoh belum ada, jadi boilerplate ini **belum disarankan untuk memulai project baru**.
+> Skill AI agent ada di `.agents/skills/`; `.claude/skills` adalah symlink ke folder itu.
+> Di Windows, aktifkan Developer Mode dan `git config core.symlinks true` sebelum clone.
 
 ## Yang sudah ada
 
