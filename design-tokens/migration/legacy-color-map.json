@@ -1,0 +1,359 @@
+{
+  "$description": "Pemetaan token warna project acuan (tailwind.css lama) ke token Figma (tokens.css). Dipakai oleh scripts/migrate-legacy-colors.mjs. Status: same = nama & nilai sama; value-changed = nama sama, nilai berubah mengikuti Figma; renamed = nama baru, nilai sama/hampir sama; review = nama baru, nilai atau peran perlu dicek visual; no-token = tidak ada padanan, jangan dibawa ke design system.",
+  "tokens": {
+    "content-primary": {
+      "to": "content-primary",
+      "status": "same",
+      "old": "#1F1F1F"
+    },
+    "content-secondary": {
+      "to": "content-secondary",
+      "status": "same",
+      "old": "#525252"
+    },
+    "content-tertiary": {
+      "to": "content-tertiary",
+      "status": "value-changed",
+      "old": "#A4A7AE",
+      "new": "#A3A3A3"
+    },
+    "content-guide": {
+      "to": "content-guide",
+      "status": "same",
+      "old": "#0968F6"
+    },
+    "content-negative": {
+      "to": "content-negative",
+      "status": "same",
+      "old": "#F02D2D"
+    },
+    "content-positive": {
+      "to": "content-positive",
+      "status": "value-changed",
+      "old": "#288034",
+      "new": "#3CC14E",
+      "note": "Lebih terang; kontras teks hijau di atas putih turun. Konfirmasi ke tim desain."
+    },
+    "content-dark-secondary": {
+      "to": "neutral-200",
+      "status": "renamed",
+      "old": "#E5E5E5",
+      "note": "Teks sekunder di permukaan gelap. Idealnya bagian gelap memakai data-theme=\"dark\" lalu content-secondary."
+    },
+    "content-light-secondary": {
+      "to": "neutral-500",
+      "status": "review",
+      "old": "#717680",
+      "new": "#737373"
+    },
+    "content-disabled": {
+      "to": "neutral-300",
+      "status": "review",
+      "old": "#D5D7DA",
+      "new": "#D4D4D4",
+      "note": "Figma belum punya Content/Disabled. Minta ditambahkan."
+    },
+    "content-link": {
+      "to": "content-guide",
+      "status": "renamed",
+      "old": "#0968F6"
+    },
+
+    "stroke-primary": {
+      "to": "stroke-primary",
+      "status": "value-changed",
+      "old": "#E6E6E8",
+      "new": "#E5E5E5"
+    },
+    "stroke-secondary": {
+      "to": "stroke-secondary",
+      "status": "value-changed",
+      "old": "#A3A3A3",
+      "new": "#737373",
+      "note": "Garis sekunder jadi jauh lebih gelap."
+    },
+    "stroke-tertiary": {
+      "to": "stroke-tertiary",
+      "status": "same",
+      "old": "#1F1F1F"
+    },
+    "stroke-subtle": {
+      "to": "stroke-primary",
+      "status": "renamed",
+      "old": "#E5E5E5"
+    },
+
+    "background-primary": {
+      "to": "base-black",
+      "status": "review",
+      "old": "#0C111D",
+      "new": "#141414",
+      "note": "BAHAYA: nama sama, makna terbalik. Lama = navy gelap, baru = putih (latar halaman). Wajib di-rename, lint tidak akan menangkapnya."
+    },
+    "background-secondary": {
+      "to": "background-secondary",
+      "status": "same",
+      "old": "#FDFBFB"
+    },
+    "background-tertiary": {
+      "to": "background-tertiary",
+      "status": "same",
+      "old": "#F2F2F2"
+    },
+    "background-inverse": {
+      "to": "base-black",
+      "status": "renamed",
+      "old": "#141414"
+    },
+    "background-sentiment-positive": {
+      "to": "positive-50",
+      "status": "renamed",
+      "old": "#F6FEF9",
+      "new": "#FAFFFA"
+    },
+    "background-sentiment-negative": {
+      "to": "negative-50",
+      "status": "renamed",
+      "old": "#FFFBFA",
+      "new": "#FFFAFA"
+    },
+    "overlay-primary": {
+      "to": "background-overlay",
+      "status": "renamed",
+      "old": "#1F1F1F7A"
+    },
+
+    "primary-primary": {
+      "to": "brand-primary",
+      "status": "renamed",
+      "old": "#141414",
+      "note": "Sama dengan Brand Neutral Primary/Primary."
+    },
+    "blue-primary": {
+      "to": "brand-primary",
+      "status": "review",
+      "old": "#2C37FF",
+      "note": "Warna brand lama (ocean) tidak ada di mode brand Figma mana pun."
+    },
+    "blue-100": {
+      "to": "brand-primary-50",
+      "status": "review",
+      "old": "#EDF8FF"
+    },
+    "ocean-50": {
+      "to": "brand-primary-50",
+      "status": "review",
+      "old": "#EBF3FFF0"
+    },
+    "ocean-600": {
+      "to": "brand-primary",
+      "status": "review",
+      "old": "#2C37FF"
+    },
+    "ocean-950": {
+      "to": "brand-primary-900",
+      "status": "review",
+      "old": "#131653"
+    },
+    "sidebar-active": {
+      "to": "brand-primary",
+      "status": "review",
+      "old": "var(--color-ocean-600)"
+    },
+    "sidebar-box-active": {
+      "to": "brand-primary-25",
+      "status": "review",
+      "old": "#F6F9FF",
+      "note": "Nilainya persis INAgov Primary/25."
+    },
+    "user-profile": {
+      "to": "brand-primary-300",
+      "status": "review",
+      "old": "#629CEF",
+      "note": "Nilainya persis INAgov Primary/300."
+    },
+
+    "sentiment-info": {
+      "to": "guide-100",
+      "status": "renamed",
+      "old": "#EBF3FF",
+      "new": "#ECF3FE"
+    },
+    "sentiment-info-500": {
+      "to": "guide-500",
+      "status": "review",
+      "old": "#2871FF",
+      "new": "#0968F6"
+    },
+    "sentiment-guide-500": {
+      "to": "guide-500",
+      "status": "renamed",
+      "old": "#0968F6"
+    },
+
+    "sentiment-positive": {
+      "to": "positive-500",
+      "byPrefix": { "text": "content-positive", "fill": "content-positive" },
+      "status": "review",
+      "old": "#16A34A"
+    },
+    "sentiment-positive-50": {
+      "to": "positive-50",
+      "status": "renamed",
+      "old": "#FAFFFA"
+    },
+    "sentiment-positive-100": {
+      "to": "positive-100",
+      "status": "review",
+      "old": "#DCFCE7",
+      "new": "#EDFDED"
+    },
+    "sentiment-positive-500": {
+      "to": "positive-500",
+      "status": "review",
+      "old": "#09F638",
+      "new": "#3CC14E"
+    },
+    "sentiment-positive-600": {
+      "to": "positive-500",
+      "status": "review",
+      "old": "#00B925",
+      "new": "#3CC14E"
+    },
+
+    "sentiment-negative": {
+      "to": "negative-500",
+      "byPrefix": { "text": "content-negative", "fill": "content-negative" },
+      "status": "renamed",
+      "old": "#F02D2D"
+    },
+    "sentiment-negative-50": {
+      "to": "negative-50",
+      "status": "renamed",
+      "old": "#FFFAFA"
+    },
+    "sentiment-negative-100": {
+      "to": "negative-100",
+      "status": "review",
+      "old": "#FFEBEB",
+      "new": "#FDEDED"
+    },
+    "sentiment-negative-500": {
+      "to": "negative-500",
+      "status": "review",
+      "old": "#F04438",
+      "new": "#F02D2D"
+    },
+    "sentiment-negative-600": {
+      "to": "negative-600",
+      "status": "review",
+      "old": "#B80000",
+      "new": "#D50B0B"
+    },
+
+    "sentiment-warning": {
+      "to": "warning-500",
+      "status": "review",
+      "old": "#F59E0B",
+      "new": "#EEBB04"
+    },
+    "sentiment-warning-50": {
+      "to": "warning-50",
+      "status": "renamed",
+      "old": "#FFFEFA"
+    },
+    "sentiment-warning-100": {
+      "to": "warning-100",
+      "status": "renamed",
+      "old": "#FFF9EB"
+    },
+    "sentiment-warning-500": {
+      "to": "warning-500",
+      "status": "review",
+      "old": "#F66A09",
+      "new": "#EEBB04",
+      "note": "Lama oranye, baru kuning. Figma belum punya oranye semantic."
+    },
+    "sentiment-warning-600": {
+      "to": "warning-600",
+      "status": "renamed",
+      "old": "#855F00"
+    },
+
+    "positive-50": { "to": "positive-50", "status": "same", "old": "#FAFFFA" },
+    "positive-100": {
+      "to": "positive-100",
+      "status": "value-changed",
+      "old": "#DCFCE7",
+      "new": "#EDFDED"
+    },
+    "positive-600": {
+      "to": "positive-600",
+      "status": "same",
+      "old": "#288034"
+    },
+    "positive-700": {
+      "to": "positive-700",
+      "status": "value-changed",
+      "old": "#006B15",
+      "new": "#1B561A"
+    },
+    "negative-50": {
+      "to": "negative-50",
+      "status": "value-changed",
+      "old": "#FAFFFA",
+      "new": "#FFFAFA",
+      "note": "Nilai lama hijau (bug); Figma memperbaikinya."
+    },
+    "negative-100": {
+      "to": "negative-100",
+      "status": "same",
+      "old": "#FDEDED"
+    },
+    "negative-500": {
+      "to": "negative-500",
+      "status": "value-changed",
+      "old": "#F60909",
+      "new": "#F02D2D"
+    },
+    "negative-600": {
+      "to": "negative-600",
+      "status": "same",
+      "old": "#D50B0B"
+    },
+    "warning-50": { "to": "warning-50", "status": "same", "old": "#FFFEFA" },
+    "warning-400": { "to": "warning-400", "status": "same", "old": "#FFCC14" },
+    "warning-600": { "to": "warning-600", "status": "same", "old": "#855F00" },
+    "warning-800": { "to": "warning-800", "status": "same", "old": "#312102" },
+    "guide-100": { "to": "guide-100", "status": "same", "old": "#ECF3FE" },
+    "guide-600": { "to": "guide-600", "status": "same", "old": "#0049B8" },
+
+    "chart-user-distribution-1": {
+      "to": "chart-categorical-02",
+      "status": "review",
+      "old": "#5157FB"
+    },
+    "chart-user-distribution-2": {
+      "to": "chart-categorical-10",
+      "status": "review",
+      "old": "#D951FB"
+    },
+
+    "quick-action-signature-start": {
+      "status": "no-token",
+      "old": "#1A269A",
+      "note": "Gradien dekoratif khusus fitur klien. Tidak dibawa ke boilerplate."
+    },
+    "quick-action-signature-end": { "status": "no-token", "old": "#4550BB" },
+    "quick-action-materai-start": { "status": "no-token", "old": "#CC6F3E" },
+    "quick-action-materai-end": { "status": "no-token", "old": "#E89468" },
+    "quick-action-stamp-start": { "status": "no-token", "old": "#841DA5" },
+    "quick-action-stamp-end": { "status": "no-token", "old": "#A242C1" },
+    "gradient-banner-start": {
+      "status": "no-token",
+      "old": "#B940FB",
+      "note": "Minta tim desain menambah token gradien kalau banner dibutuhkan di boilerplate."
+    },
+    "gradient-banner-end": { "status": "no-token", "old": "#2032F4" }
+  }
+}
