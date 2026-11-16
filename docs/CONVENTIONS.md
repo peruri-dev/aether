@@ -154,6 +154,15 @@ src/modules/<modul>/
 
 **[I4] Dependency:** jangan install dengan `--force` atau `--legacy-peer-deps`, dan jangan menjalankan `npm audit fix --force`. Konflik peer dependency dilaporkan dan dicari jalan keluarnya. Gerbang audit di CI hanya untuk dependency produksi (`npm run audit:prod`, ADR-0007). Dependency memakai range eksplisit, bukan `*`.
 
+**[I5] UI Contract (data-testid).** Mengikuti kebijakan QA "011. UI Contract" di Confluence; aturan lengkap untuk agent ada di skill `.claude/skills/ui-contract/`.
+
+- Format `<page-or-flow>.<element>.<intent>`, bahasa Inggris huruf kecil, contoh `profile.button.save`.
+- Hanya untuk elemen bisnis yang diinteraksikan atau diverifikasi QA; tidak untuk elemen dekoratif atau wrapper layout.
+- Tidak boleh memuat teks UI, posisi, style, state, environment, atau ID record. Item berulang memakai satu ID yang sama, dengan identitas di atribut terpisah (`data-user-id`).
+- Ditulis sebagai atribut biasa di pemanggil. Primitif `common` wajib meneruskannya ke node interaktif.
+- `data-testid` tidak menggantikan aksesibilitas. Test komponen (Vitest) mendahulukan `getByRole` dan `getByLabel`; `getByTestId` dipakai untuk alur QA (Playwright).
+- Mengganti nama atau menghapus `data-testid` yang sudah dipakai test adalah perubahan yang merusak kompatibilitas, dan harus disertai pembaruan test terkait di PR yang sama.
+
 ## J. Anti-pattern
 
 | ID  | Dilarang                                                                   | Ganti dengan                                                          |
@@ -169,6 +178,7 @@ src/modules/<modul>/
 | J9  | File test di `src/pages/`                                                  | `tests/api/` [I2]                                                     |
 | J10 | Mengedit `tokens.css` secara manual                                        | Ubah di Figma → `npm run tokens` [D4]                                 |
 | J11 | `NODE_ENV` atau `process.env` untuk konfigurasi aplikasi                   | `astro:env` [K1, K3]                                                  |
+| J12 | `data-testid` berisi teks UI, state, posisi, atau ID record                | Format `page-or-flow.element.intent` [I5]                             |
 
 ## K. Environment dan deployment
 
