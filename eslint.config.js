@@ -11,8 +11,29 @@ import unicorn from 'eslint-plugin-unicorn';
 import prettier from 'eslint-config-prettier';
 import globals from 'globals';
 
+const restrictedPaths = [
+  {
+    name: 'tailwind-variants',
+    importNames: ['tv'],
+    message:
+      'Pakai tv dari @/modules/common/styles/tv agar class token di-merge dengan benar.',
+  },
+  {
+    name: 'class-variance-authority',
+    message: 'Aether memakai tv (CONVENTIONS [D2]).',
+  },
+];
+
 export default defineConfig([
-  { ignores: ['dist/', '.astro/', 'node_modules/', 'coverage/'] },
+  {
+    ignores: [
+      'dist/',
+      '.astro/',
+      'node_modules/',
+      'coverage/',
+      'docs/analysis/',
+    ],
+  },
   js.configs.recommended,
   tseslint.configs.strict,
   astro.configs.recommended,
@@ -137,6 +158,7 @@ export default defineConfig([
                 'Impor modul lain lewat @/modules/<nama>. Di dalam modul sendiri pakai path relatif.',
             },
           ],
+          paths: restrictedPaths,
         },
       ],
     },
@@ -154,6 +176,7 @@ export default defineConfig([
                 'Impor modul lain lewat @/modules/<nama>. Kode */server tidak boleh dipakai di React.',
             },
           ],
+          paths: restrictedPaths,
         },
       ],
     },

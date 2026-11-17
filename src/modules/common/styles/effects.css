@@ -1,0 +1,19 @@
+/*
+ * Shadow dari project acuan, ditulis ulang memakai token.
+ * `inline` wajib: nilainya merujuk variabel yang berganti lewat data-brand / data-theme,
+ * jadi harus di-resolve di elemen pemakai, bukan sekali di :root.
+ */
+@theme inline {
+  /* lama: shadow-ocean-glow (rgba biru #2C37FF), kini mengikuti brand aktif */
+  --shadow-brand-glow:
+    0 0 12px 0 color-mix(in oklab, var(--brand-primary) 12%, transparent),
+    0 0 4px 0 color-mix(in oklab, var(--brand-primary) 8%, transparent);
+
+  /* lama: shadow-focus-blue */
+  --shadow-focus: 0 0 0 1px
+    color-mix(in oklab, var(--product-guide-500) 35%, transparent);
+
+  /* kolom aksi tabel yang menempel di kanan (dipakai Table, PR 6d) */
+  --shadow-pinned: -9px 0 16px -4px
+    color-mix(in oklab, var(--primitive-neutral-900) 8%, transparent);
+}

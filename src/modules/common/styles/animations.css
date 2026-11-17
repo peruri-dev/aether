@@ -1,0 +1,190 @@
+/*
+ * Animasi komponen dari project acuan. Bukan token Figma: jangan dipindah ke tokens.css.
+ * Animasi enter/exit generik (animate-in, fade-in, zoom-in, slide-in-from-*) datang dari tw-animate-css.
+ */
+@theme {
+  --animate-hide: hide 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-down-and-fade: slide-down-and-fade 150ms
+    cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-left-and-fade: slide-left-and-fade 150ms
+    cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-up-and-fade: slide-up-and-fade 150ms
+    cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-right-and-fade: slide-right-and-fade 150ms
+    cubic-bezier(0.16, 1, 0.3, 1);
+
+  --animate-drawer-slide-left-and-fade: drawer-slide-left-and-fade 150ms
+    cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-drawer-slide-right-and-fade: drawer-slide-right-and-fade 150ms
+    ease-in;
+
+  --animate-accordion-open: accordion-open 250ms cubic-bezier(0.2, 0, 0, 1);
+  --animate-accordion-close: accordion-close 250ms cubic-bezier(0.2, 0, 0, 1);
+
+  --animate-dialog-overlay-show: dialog-overlay-show 150ms
+    cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-dialog-content-show: dialog-content-show 150ms
+    cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Keyframe di dalam @theme hanya dikeluarkan bila --animate-* pemakainya dipakai. */
+  @keyframes hide {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes slide-down-and-fade {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slide-left-and-fade {
+    from {
+      opacity: 0;
+      transform: translateX(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide-up-and-fade {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slide-right-and-fade {
+    from {
+      opacity: 0;
+      transform: translateX(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes drawer-slide-left-and-fade {
+    from {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes drawer-slide-right-and-fade {
+    from {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes accordion-open {
+    from {
+      height: 0;
+      opacity: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+      opacity: 1;
+    }
+  }
+
+  @keyframes accordion-close {
+    from {
+      height: var(--radix-accordion-content-height);
+      opacity: 1;
+    }
+    to {
+      height: 0;
+      opacity: 0;
+    }
+  }
+
+  @keyframes dialog-overlay-show {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes dialog-content-show {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+/*
+ * Skeleton loading. Keyframe sengaja di luar @theme: tidak ada --animate-* yang memakainya,
+ * jadi di dalam @theme keyframe ini bisa terbuang saat build.
+ * Pemakaian: <div class="relative overflow-hidden shimmer bg-neutral-100" />
+ */
+@keyframes shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@utility shimmer {
+  --shimmer-highlight: color-mix(
+    in oklab,
+    var(--product-base-white) 45%,
+    transparent
+  );
+  --shimmer-duration: 1.2s;
+  --shimmer-feather: 35%;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+      90deg,
+      transparent calc(50% - var(--shimmer-feather)),
+      var(--shimmer-highlight) 50%,
+      transparent calc(50% + var(--shimmer-feather))
+    );
+    animation: shimmer var(--shimmer-duration) infinite linear;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::after {
+      animation: none;
+    }
+  }
+}

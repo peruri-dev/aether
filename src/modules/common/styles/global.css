@@ -1,2 +1,25 @@
 @import 'tailwindcss';
+@import 'tw-animate-css';
+@import '@fontsource-variable/inter';
 @import './tokens.css';
+@import './extensions.css';
+@import './animations.css';
+@import './effects.css';
+
+/*
+ * dark: mengikuti <html data-theme="dark">, bukan preferensi OS.
+ * Komponen yang memakai token semantic (bg-background-primary, text-content-primary, ...)
+ * otomatis berganti tanpa perlu prefix dark: sama sekali.
+ */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@theme {
+  /* Generic family tanpa tanda kutip; 'sans-serif' berkutip dibaca sebagai nama font. */
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-background-primary text-content-primary;
+  }
+}
