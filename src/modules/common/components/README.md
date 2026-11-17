@@ -8,6 +8,7 @@ Design system Aether: primitif dan komponen generik. Pengganti Storybook: sebelu
 | -------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- | ----------------------------------------------------------------------- |
 | Button   | `button.tsx` | `variant`: primary, secondary, light, ghost, outline, destructive, destructive-outline, destructive-ghost · `isLoading`, `loadingText`, `asChild` | `<button>`, atau child saat `asChild` | Default `type="button"`. Tombol ikon wajib `aria-label`                 |
 | Input    | `input.tsx`  | `hasError`, `enableStepper`, `type` (khusus `password` dan `search`), `rightElement`, `inputClassName`                                            | `<input>`                             | `aria-invalid` ikut `hasError`. Toggle sandi pakai `aria-label` dinamis |
+| Label    | `label.tsx`  | `disabled`                                                                                                                                        | `<label>`                             | Asosiasi via `htmlFor`/`id` atau bungkus kontrolnya                     |
 
 ## Aturan komponen
 
@@ -23,11 +24,12 @@ Design system Aether: primitif dan komponen generik. Pengganti Storybook: sebelu
 
 Ikuti checklist di `design-tokens/migration/README.md`, lalu cek tabel perubahan API di bawah.
 
-| Komponen | Lama                                             | Aether                                                      |
-| -------- | ------------------------------------------------ | ----------------------------------------------------------- |
-| Button   | `variant="destructive2"`                         | `variant="destructive-outline"`                             |
-| Button   | `variant="destructive3"`                         | `variant="destructive-ghost"`                               |
-| Button   | `variant="glass"`                                | Dihapus. Buat di modul pemakai bila masih perlu             |
-| Button   | tanpa `type` = submit                            | tanpa `type` = button. Tulis `type="submit"` di tombol form |
-| Input    | "Show password" hardcode EN, tanpa label dinamis | `aria-label` dinamis bilingual (`text('ID', 'EN')`)         |
-| Input    | `hasError` tidak mengubah ARIA                   | `aria-invalid` menyala saat `hasError`                      |
+| Komponen | Lama                                             | Aether                                                             |
+| -------- | ------------------------------------------------ | ------------------------------------------------------------------ |
+| Button   | `variant="destructive2"`                         | `variant="destructive-outline"`                                    |
+| Button   | `variant="destructive3"`                         | `variant="destructive-ghost"`                                      |
+| Button   | `variant="glass"`                                | Dihapus. Buat di modul pemakai bila masih perlu                    |
+| Button   | tanpa `type` = submit                            | tanpa `type` = button. Tulis `type="submit"` di tombol form        |
+| Input    | "Show password" hardcode EN, tanpa label dinamis | `aria-label` dinamis bilingual (`text('ID', 'EN')`)                |
+| Input    | `hasError` tidak mengubah ARIA                   | `aria-invalid` menyala saat `hasError`                             |
+| Label    | `@radix-ui/react-label`                          | `<label>` native — tidak ada komponen lain yang bergantung padanya |

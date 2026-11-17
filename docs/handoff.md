@@ -79,12 +79,12 @@ Detail ada di ADR dan CONVENTIONS. Daftar ini untuk orientasi cepat.
 
 ### PR 6b: batch form (sedang berjalan)
 
-- [x] **Button**: selesai dan disetujui lewat cek visual (2026-11-17). Di-commit di branch `feat/button`; lint, test, dan build lolos. Tambahan saat perbaikan:
+- [x] **Button**: selesai dan disetujui lewat cek visual (2026-11-17). Merged lewat PR #14. Tambahan saat perbaikan:
   - `afterEach(cleanup)` di `tests/setup/vitest.setup.ts` — tanpa `globals: true` di vitest, auto-cleanup Testing Library tidak jalan sehingga render bocor antar test.
   - Spasi nyata (`{' '}`) setelah teks sr-only di state loading agar accessible name tidak menjadi `MemuatSimpan`.
   - Tiga keputusan API disetujui: default `type="button"`, `destructive-outline`/`destructive-ghost`, tanpa varian `glass`.
-- [ ] Input
-- [ ] Label
+- [x] **Input**: merged lewat PR #16 (`feat/input`). Bug yang tercatat ikut diperbaiki: `aria-label` dinamis bilingual untuk toggle sandi, `aria-invalid` menyala saat `hasError`, `hasErrorInput` versi baru (fokus tetap merah). Interface memakai `React.ComponentProps<'input'>` (bukan `InputHTMLAttributes`) supaya `ref` bisa sebagai props biasa. Cek visual toggle sandi dan `hasError` masih menunggu konfirmasi.
+- [ ] **Label** (branch `feat/label`): diporting sebagai `<label>` native, **tanpa** `@radix-ui/react-label` — Checkbox/RadioGroup di project acuan ternyata tidak bergantung padanya. Token stopgap `content-disabled` (nilai lama `#D5D7DA` ≈ `neutral-300`) ditambahkan di `extensions.css` sambil menunggu tim desain (bagian 7).
 - [ ] Checkbox
 - [ ] RadioGroup
 - [ ] Select
@@ -105,6 +105,10 @@ Detail ada di ADR dan CONVENTIONS. Daftar ini untuk orientasi cepat.
 
 - [ ] Table (termasuk `.pinned-action-col` lama, ditulis ulang dengan `shadow-pinned` dan token, tanpa `!important`)
 - [ ] Accordion
+
+### Pola merge stacked PR (terbukti di #13 → #14 → #16)
+
+Setelah PR parent di-squash-merge ke `main`, branch anak akan konflik di `package.json` dan lockfile (commit parent aslinya tidak dikenal `main`). Solusinya: `git rebase origin/main` pada branch anak — patch yang patch-id-nya sudah ada di `main` dilepas otomatis — lalu `git push --force-with-lease`, `gh pr edit <nomor> --base main`, baru merge squash.
 
 ### Pertanyaan terbuka untuk v0.2.0
 
