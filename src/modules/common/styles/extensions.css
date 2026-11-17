@@ -1,0 +1,14 @@
+/*
+ * Token tambahan Aether yang belum ada di Figma.
+ * Hapus dari sini begitu tim desain menambahkannya ke design-tokens/figma/
+ * (lalu `npm run tokens`), dan pastikan namanya sama supaya komponen tidak perlu diubah.
+ */
+@theme inline {
+  /*
+   * Teks/ikon di atas warna solid (tombol primary, destructive, badge solid).
+   * Sengaja tidak ikut data-theme: latar brand dan negative tidak berganti di dark mode,
+   * sedangkan base-white berubah jadi gelap.
+   */
+  --color-content-on-brand: var(--primitive-neutral-25);
+  --color-content-on-negative: var(--primitive-neutral-25);
+}
