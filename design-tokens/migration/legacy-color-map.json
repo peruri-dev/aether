@@ -47,11 +47,11 @@
       "new": "#737373"
     },
     "content-disabled": {
-      "to": "neutral-300",
-      "status": "review",
+      "to": "content-disabled",
+      "status": "value-changed",
       "old": "#D5D7DA",
       "new": "#D4D4D4",
-      "note": "Figma belum punya Content/Disabled. Minta ditambahkan."
+      "note": "Nama tetap; token stopgap ada di extensions.css (neutral-300) sambil menunggu Content/Disabled dari tim desain."
     },
     "content-link": {
       "to": "content-guide",

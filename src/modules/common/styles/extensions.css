@@ -11,4 +11,10 @@
    */
   --color-content-on-brand: var(--primitive-neutral-25);
   --color-content-on-negative: var(--primitive-neutral-25);
+
+  /*
+   * Teks kontrol nonaktif (label, input disabled). Nilai lama #D5D7DA ≈ neutral-300.
+   * Menunggu token Content/Disabled dari tim desain (handoff bagian 7).
+   */
+  --color-content-disabled: var(--primitive-neutral-300);
 }
