@@ -79,11 +79,10 @@ Detail ada di ADR dan CONVENTIONS. Daftar ini untuk orientasi cepat.
 
 ### PR 6b: batch form (sedang berjalan)
 
-- [ ] **Button**: sudah di-commit di branch `feat/button`; lint, test, dan build lolos. Tambahan saat perbaikan:
+- [x] **Button**: selesai dan disetujui lewat cek visual (2026-11-17). Di-commit di branch `feat/button`; lint, test, dan build lolos. Tambahan saat perbaikan:
   - `afterEach(cleanup)` di `tests/setup/vitest.setup.ts` — tanpa `globals: true` di vitest, auto-cleanup Testing Library tidak jalan sehingga render bocor antar test.
   - Spasi nyata (`{' '}`) setelah teks sr-only di state loading agar accessible name tidak menjadi `MemuatSimpan`.
-  - Tiga keputusan API sudah diimplementasikan di kode (default `type="button"`, `destructive-outline`/`destructive-ghost`, tanpa varian `glass`) — tinggal disetujui.
-  - Sisa: cek visual — primary dengan brand neutral jadi **hitam**, hover destructive jadi `negative-600/85`, plus `data-theme="dark"` dan dua nilai `data-brand`.
+  - Tiga keputusan API disetujui: default `type="button"`, `destructive-outline`/`destructive-ghost`, tanpa varian `glass`.
 - [ ] Input
 - [ ] Label
 - [ ] Checkbox
