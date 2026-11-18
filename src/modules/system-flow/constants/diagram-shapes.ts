@@ -88,14 +88,13 @@ function buildObject(nodeId: NodeId): IsoShape[] {
   const oy = node.gy - DIAGRAM.platform.d / 2;
 
   if (nodeId === 'user') {
-    const sx = ox + 8;
-    const sy = oy + 8;
-    const faceY = sy + 8;
+    const sx = ox + 6;
+    const faceY = oy + 8;
     return [
       // layar laptop (paling belakang); kakinya tenggelam ke papan ketik agar
       // sambungan terlihat menyatu, lalu papan ketik menutupi bagian bawahnya
-      ...box(sx, sy, 84, 8, 56, 20),
-      ...box(sx, oy + 12, 84, 50, 8, 16),
+      ...box(sx, oy + 8, 84, 8, 56, 20),
+      ...box(sx, oy, 84, 50, 8, 16),
       // blok UI di layar
       strip(sx, faceY, 84, 62, 70, 6, 'screenTile'),
       strip(sx, faceY, 56, 50, 54, 6, 'detail'),
@@ -105,24 +104,24 @@ function buildObject(nodeId: NodeId): IsoShape[] {
   }
 
   if (nodeId === 'app') {
-    const px = ox + 6;
-    const faceY = oy + 36;
+    const px = ox + 5;
+    const faceY = oy + 30;
     return [
-      ...box(px, oy + 26, 88, 10, 64, 16),
-      strip(px, faceY, 88, 72, 79, 3, 'screenTile'),
-      strip(px + 50, faceY, 34, 30, 62, 3, 'detail'),
-      strip(px, faceY, 40, 54, 58, 3, 'detail'),
-      strip(px, faceY, 40, 46, 50, 3, 'detail'),
-      strip(px, faceY, 40, 38, 42, 3, 'detail'),
-      faceDot(px + 12, faceY, 75.5, 2.5, 'detail'),
+      ...box(px, oy + 20, 80, 10, 64, 16),
+      strip(px, faceY, 80, 72, 79, 3, 'screenTile'),
+      strip(px + 46, faceY, 30, 30, 62, 3, 'detail'),
+      strip(px, faceY, 36, 54, 58, 3, 'detail'),
+      strip(px, faceY, 36, 46, 50, 3, 'detail'),
+      strip(px, faceY, 36, 38, 42, 3, 'detail'),
+      faceDot(px + 10, faceY, 75.5, 2.5, 'detail'),
     ];
   }
 
   if (nodeId === 'server') {
-    const rx = ox + 13;
-    const faceY = oy + 62;
+    const rx = ox + 8;
+    const faceY = oy + 47;
     return [
-      ...box(rx, oy + 8, 64, 54, 78, 16),
+      ...box(rx, oy + 3, 64, 44, 78, 16),
       strip(rx, faceY, 64, 26, 30, 4, 'detail'),
       strip(rx, faceY, 64, 40, 44, 4, 'detail'),
       strip(rx, faceY, 64, 54, 58, 4, 'detail'),
@@ -135,9 +134,9 @@ function buildObject(nodeId: NodeId): IsoShape[] {
   // database: tumpukan dua silinder + tutup
   const cx = ox + node.pw / 2;
   const cy = oy + DIAGRAM.platform.d / 2;
-  const lower = cylinder(cx, cy, 30, 20, 16, O);
-  const upper = cylinder(cx, cy, 30, 20, 36, O);
-  const lid = isoEllipse(cx, cy, 20, 58, O);
+  const lower = cylinder(cx, cy, 24, 20, 16, O);
+  const upper = cylinder(cx, cy, 24, 20, 36, O);
+  const lid = isoEllipse(cx, cy, 16, 58, O);
   return [
     { kind: 'path', d: lower.side, fill: 'faceLeft', stroke: true },
     {

@@ -27,15 +27,15 @@ export interface DiagramNode {
  * kanan-atas (database, paling jauh) — komposisi yang sama dengan project acuan.
  */
 export const DIAGRAM = {
-  width: 760,
+  width: 740,
   height: 400,
   /** Titik ground (0,0) jatuh di layar. */
-  offset: { x: 310, y: 235 } as XY,
+  offset: { x: 170, y: 285 } as XY,
   /** Pelat dasar scene di ground: dari (x0,y0) sampai (x1,y1), tebal ke bawah. */
-  slab: { x0: -55, y0: -360, x1: 55, y1: 120, thickness: 18 },
+  slab: { x0: -60, y0: -480, x1: 60, y1: 85, thickness: 18 },
   /** Jarak antar garis grid di pelat. */
   gridStep: 40,
-  platform: { d: 70, h: 16 },
+  platform: { d: 50, h: 16 },
   /** Jarak label/pill di bawah pusat stasiun. */
   labelGap: 44,
   labelPill: { w: 150, h: 24 },
@@ -46,31 +46,31 @@ export const DIAGRAM = {
       id: 'user',
       gx: 0,
       gy: 40,
-      pw: 100,
+      pw: 96,
       label: 'Pengguna',
       sub: 'shop.example',
     },
     {
       id: 'app',
       gx: 0,
-      gy: -80,
-      pw: 100,
+      gy: -120,
+      pw: 90,
       label: 'Website',
       sub: 'UI + skeleton',
     },
     {
       id: 'server',
       gx: 0,
-      gy: -200,
-      pw: 90,
+      gy: -280,
+      pw: 80,
       label: 'Server API',
       sub: 'GET /api/products',
     },
     {
       id: 'database',
       gx: 0,
-      gy: -320,
-      pw: 90,
+      gy: -440,
+      pw: 80,
       label: 'Database',
       sub: 'SELECT … FROM products',
     },
