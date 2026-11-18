@@ -22,9 +22,9 @@ export interface DiagramNode {
 }
 
 /**
- * Layout scene isometrik. Stasiun mengalir sepanjang arah menjauh (−gy) sehingga
+ * Layout scene isometrik. Stasiun mengalir sepanjang arah menjauh (−gx) sehingga
  * alur menanjak diagonal dari kiri-bawah (pengguna, paling dekat penonton) ke
- * kanan-atas (database, paling jauh) — komposisi yang sama dengan project acuan.
+ * kanan-atas (database, paling jauh); muka depan objek menghadap kanan-bawah.
  */
 export const DIAGRAM = {
   width: 740,
@@ -32,7 +32,7 @@ export const DIAGRAM = {
   /** Titik ground (0,0) jatuh di layar. */
   offset: { x: 170, y: 285 } as XY,
   /** Pelat dasar scene di ground: dari (x0,y0) sampai (x1,y1), tebal ke bawah. */
-  slab: { x0: -60, y0: -480, x1: 60, y1: 85, thickness: 18 },
+  slab: { x0: -480, y0: -60, x1: 85, y1: 60, thickness: 18 },
   /** Jarak antar garis grid di pelat. */
   gridStep: 40,
   platform: { d: 50, h: 16 },
@@ -44,32 +44,32 @@ export const DIAGRAM = {
   stations: [
     {
       id: 'user',
-      gx: 0,
-      gy: 40,
+      gx: 40,
+      gy: 0,
       pw: 96,
       label: 'Pengguna',
       sub: 'shop.example',
     },
     {
       id: 'app',
-      gx: 0,
-      gy: -120,
+      gx: -120,
+      gy: 0,
       pw: 90,
       label: 'Website',
       sub: 'UI + skeleton',
     },
     {
       id: 'server',
-      gx: 0,
-      gy: -280,
+      gx: -280,
+      gy: 0,
       pw: 80,
       label: 'Server API',
       sub: 'GET /api/products',
     },
     {
       id: 'database',
-      gx: 0,
-      gy: -440,
+      gx: -440,
+      gy: 0,
       pw: 80,
       label: 'Database',
       sub: 'SELECT … FROM products',

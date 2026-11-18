@@ -1,7 +1,8 @@
 /**
- * Matematika proyeksi isometrik 2:1 — teknik yang sama dengan project acuan
- * (matrix(1 -0.5 1 0.5) untuk bidang ground): sumbu ground +x mengarah
- * kanan-bawah layar, +y kiri-bawah, +z ke atas. Semua fungsi murni agar bisa
+ * Matematika proyeksi isometrik 2:1 — varian cermin dari project acuan
+ * (matrix(-1 -0.5 1 0.5) untuk bidang ground): sumbu ground +x mengarah
+ * kiri-bawah layar, +y kanan-bawah, +z ke atas. Dengan ini muka depan objek
+ * (bidang +gy) menghadap kanan-bawah penonton. Semua fungsi murni agar bisa
  * dites dan dihitung sekali sebagai konstanta, bukan saat render.
  */
 
@@ -15,7 +16,7 @@ export type IsoPoint = readonly [number, number, number?];
 
 /** Proyeksikan satu titik ground ke koordinat layar (tanpa offset scene). */
 export function iso(x: number, y: number, z: number = 0, offset?: XY): XY {
-  const p = { x: x - y, y: (x + y) / 2 - z };
+  const p = { x: y - x, y: (x + y) / 2 - z };
   return offset ? { x: p.x + offset.x, y: p.y + offset.y } : p;
 }
 
