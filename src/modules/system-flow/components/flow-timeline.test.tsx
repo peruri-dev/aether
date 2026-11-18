@@ -49,12 +49,13 @@ describe('FlowTimeline', () => {
     setup(2);
 
     const active = screen.getByRole('button', { name: 'Langkah 3: Request' });
-    expect(active.firstElementChild).toHaveClass('bg-guide-500');
+    expect(active.firstElementChild).toHaveClass('bg-guide-500/85');
+    expect(active.firstElementChild).toHaveClass('border-guide-500/70');
 
     const reached = screen.getByRole('button', {
       name: 'Langkah 1: Buka situs',
     });
-    expect(reached.firstElementChild).toHaveClass('border-guide-500');
+    expect(reached.firstElementChild).toHaveClass('border-guide-500/50');
     expect(reached.firstElementChild).toHaveClass('text-content-guide');
 
     const upcoming = screen.getByRole('button', {

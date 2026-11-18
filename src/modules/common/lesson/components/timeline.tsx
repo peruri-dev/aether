@@ -61,7 +61,7 @@ export function LessonTimeline({
         >
           <span
             aria-hidden="true"
-            className="absolute -inset-y-px rounded-full bg-guide-500 motion-reduce:transition-none"
+            className="absolute -inset-y-px rounded-full bg-guide-500/60 motion-reduce:transition-none"
             data-testid={`${testIdPrefix}.timeline.rail.fill`}
             style={{
               width: `${railFillPercent}%`,
@@ -93,9 +93,9 @@ export function LessonTimeline({
                   className={cx(
                     'grid size-8 place-items-center rounded-full border text-sm font-semibold tabular-nums transition-colors duration-300',
                     isActive
-                      ? 'animate-hud-pop border-guide-500 bg-guide-500 text-content-on-brand'
+                      ? 'animate-hud-pop border-guide-500/70 bg-guide-500/85 text-content-on-brand'
                       : index < activeIndex
-                        ? 'border-guide-500 bg-background-tertiary text-content-guide'
+                        ? 'border-guide-500/50 bg-background-tertiary text-content-guide'
                         : 'border-stroke-primary bg-background-tertiary text-content-tertiary',
                   )}
                 >
