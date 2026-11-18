@@ -15,22 +15,14 @@ export const STEPS: readonly FlowStep[] = [
     narration: [
       'Kamu mengetik shop.example di address bar lalu menekan Enter. Browser ' +
         'menerjemahkan nama domain menjadi alamat IP lewat proses DNS lookup, lalu ' +
-        'membuka koneksi ke server aplikasi.',
-      'Sebelum ada data berpindah, browser dan server "berjabat tangan" dulu ' +
-        '(handshake). Langkah kecil ini memastikan keduanya siap berbicara.',
+        'menyiapkan koneksi ke server aplikasi.',
+      'Kamera fokus ke satu titik: browser kamu. Setiap langkah berikutnya akan ' +
+        'menambah satu stasiun ke diorama, mengikuti perjalanan request.',
     ],
     keyIdea:
       'Kunjungan halaman selalu dimulai dari browser, bukan dari server. ' +
       'Server tidak pernah menebak — ia hanya menjawab.',
-    moves: [
-      {
-        from: 'user',
-        to: 'app',
-        kind: 'handshake',
-        durationMs: 900,
-        delayMs: 0,
-      },
-    ],
+    moves: [],
     metrics: [
       { id: 'dns', label: 'DNS LOOKUP', valueMs: 24 },
       { id: 'connect', label: 'CONNECT', valueMs: 38 },
@@ -41,7 +33,7 @@ export const STEPS: readonly FlowStep[] = [
       server: 'idle',
       database: 'idle',
     },
-    reveals: ['user', 'app'],
+    reveals: ['user'],
   },
   {
     id: 'render-shell',
@@ -49,16 +41,25 @@ export const STEPS: readonly FlowStep[] = [
     label: 'Render halaman',
     title: 'Browser merender kerangka halaman',
     narration: [
-      'Sebelum data tiba, browser langsung menggambar kerangka halaman: header, ' +
-        'navigasi, dan area konten berupa skeleton abu-abu. Halaman terasa cepat ' +
-        'karena pengguna melihat sesuatu segera.',
-      'Di belakang layar, request sudah disusun: method GET, path /api/products, ' +
-        'header, dan query parameter. Request ini belum dikirim.',
+      'Website muncul di diorama: browser dan server aplikasi "berjabat tangan" ' +
+        '(handshake) untuk memastikan keduanya siap berbicara, lalu browser langsung ' +
+        'menggambar kerangka halaman berupa skeleton abu-abu.',
+      'Halaman terasa cepat karena pengguna melihat sesuatu segera. Di belakang ' +
+        'layar, request sudah disusun: method GET, path /api/products, header, dan ' +
+        'query parameter. Request ini belum dikirim.',
     ],
     keyIdea:
       'Render tidak menunggu data. Skeleton memberi kesan cepat dan menahan ' +
       'kesabaran pengguna selama request berjalan.',
-    moves: [],
+    moves: [
+      {
+        from: 'user',
+        to: 'app',
+        kind: 'handshake',
+        durationMs: 900,
+        delayMs: 0,
+      },
+    ],
     metrics: [{ id: 'render', label: 'RENDER', valueMs: 52 }],
     nodeStates: {
       user: 'done',
@@ -66,7 +67,7 @@ export const STEPS: readonly FlowStep[] = [
       server: 'idle',
       database: 'idle',
     },
-    reveals: [],
+    reveals: ['app'],
   },
   {
     id: 'send-request',
@@ -225,5 +226,5 @@ export function stepPaceMs(step: FlowStep): number {
     0,
     ...step.moves.map((move) => move.durationMs + move.delayMs),
   );
-  return moveMs + 1200;
+  return moveMs + 1500;
 }

@@ -113,15 +113,20 @@ describe('SystemFlowView', () => {
     const user = userEvent.setup();
     render(<SystemFlowView />);
 
-    // langkah 1: baru pengguna + website yang tampil
+    // langkah 1: kamera close-up, baru pengguna yang tampil
     expect(
       document.querySelectorAll('[data-node-id]:not([aria-hidden="true"])'),
-    ).toHaveLength(2);
+    ).toHaveLength(1);
+    expect(
+      document.querySelectorAll('[data-node-id][aria-hidden="true"]'),
+    ).toHaveLength(3);
+
+    await user.click(screen.getByTestId('system-flow.button.next.click'));
+    // langkah 2: website muncul, dua stasiun backend masih tersembunyi
     expect(
       document.querySelectorAll('[data-node-id][aria-hidden="true"]'),
     ).toHaveLength(2);
 
-    await user.click(screen.getByTestId('system-flow.button.next.click'));
     await user.click(screen.getByTestId('system-flow.button.next.click'));
     // langkah 3: server muncul, database masih tersembunyi
     expect(

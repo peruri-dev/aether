@@ -11,6 +11,7 @@ import {
   PACKET_LEGEND,
 } from '../constants/diagram';
 import {
+  cameraView,
   GRID_LINES,
   SLAB_SHAPES,
   SLAB_TOP_POINTS,
@@ -98,6 +99,7 @@ export default function FlowDiagram({
   const titleId = useId();
   const descId = useId();
   const clipId = useId();
+  const camera = cameraView(revealedNodes);
   const activeEdges = new Set(
     step.moves.map((move) => edgePairKey(move.from, move.to)),
   );
@@ -126,77 +128,88 @@ export default function FlowDiagram({
         </clipPath>
       </defs>
 
-      {/* Pelat dasar scene + grid isometrik yang ter-clip di dalamnya. */}
-      {SLAB_SHAPES.map((shape, index) => (
-        <Shape
-          key={`slab-${index}`}
-          shape={shape}
-          strokeClass="stroke-stroke-secondary"
-        />
-      ))}
-      <g clipPath={`url(#${clipId})`}>
-        {GRID_LINES.map((line, index) => (
-          <line
-            key={`grid-${index}`}
-            x1={line.x1}
-            y1={line.y1}
-            x2={line.x2}
-            y2={line.y2}
-            strokeWidth={1}
-            className="stroke-stroke-tertiary"
+      {/* Kamera adaptif: satu grup yang di-zoom/geser untuk membingkai hanya
+          stasiun yang sudah muncul — close-up di awal, zoom-out tiap reveal. */}
+      <g
+        style={{
+          transform: `translate(${camera.tx}px, ${camera.ty}px) scale(${camera.scale})`,
+          transition: reducedMotion
+            ? 'none'
+            : 'transform 700ms cubic-bezier(0.16, 1, 0.3, 1)',
+        }}
+      >
+        {/* Pelat dasar scene + grid isometrik yang ter-clip di dalamnya. */}
+        {SLAB_SHAPES.map((shape, index) => (
+          <Shape
+            key={`slab-${index}`}
+            shape={shape}
+            strokeClass="stroke-stroke-secondary"
+          />
+        ))}
+        <g clipPath={`url(#${clipId})`}>
+          {GRID_LINES.map((line, index) => (
+            <line
+              key={`grid-${index}`}
+              x1={line.x1}
+              y1={line.y1}
+              x2={line.x2}
+              y2={line.y2}
+              strokeWidth={1}
+              className="stroke-stroke-tertiary"
+            />
+          ))}
+        </g>
+
+        {/* Jalur antar stasiun: muncul bersama kedua ujungnya, menyala saat
+          ada packet melintas di langkah ini. */}
+        {DIAGRAM.edges.map((edge) => {
+          const { start, end } = edgeEnds(edge.from, edge.to);
+          const isActive = activeEdges.has(edgePairKey(edge.from, edge.to));
+          const visible =
+            revealedNodes.has(edge.from) && revealedNodes.has(edge.to);
+          return (
+            <line
+              key={edge.id}
+              x1={start.x}
+              y1={start.y}
+              x2={end.x}
+              y2={end.y}
+              strokeWidth={isActive ? 2 : 1.5}
+              strokeDasharray={isActive ? '6 6' : undefined}
+              strokeLinecap="round"
+              className={
+                isActive
+                  ? 'animate-trail-dash stroke-guide-500'
+                  : 'stroke-stroke-primary'
+              }
+              style={{
+                opacity: visible ? 1 : 0,
+                transition: reducedMotion ? 'none' : 'opacity 450ms ease',
+              }}
+            />
+          );
+        })}
+
+        {/* Stasiun diorama, terurut kedalaman agar tumpang-tindihnya benar. */}
+        {ORDERED_STATIONS.map((node) => (
+          <FlowStation
+            key={node.id}
+            id={node.id}
+            state={step.nodeStates[node.id]}
+            visible={revealedNodes.has(node.id)}
+            reducedMotion={reducedMotion}
+          />
+        ))}
+
+        {/* Packet terakhir agar berjalan di atas scene. */}
+        {step.moves.map((move) => (
+          <FlowPacket
+            key={`${runId}-${move.from}-${move.to}-${move.kind}-${move.delayMs}`}
+            move={move}
+            reducedMotion={reducedMotion}
           />
         ))}
       </g>
-
-      {/* Jalur antar stasiun: muncul bersama kedua ujungnya, menyala saat
-          ada packet melintas di langkah ini. */}
-      {DIAGRAM.edges.map((edge) => {
-        const { start, end } = edgeEnds(edge.from, edge.to);
-        const isActive = activeEdges.has(edgePairKey(edge.from, edge.to));
-        const visible =
-          revealedNodes.has(edge.from) && revealedNodes.has(edge.to);
-        return (
-          <line
-            key={edge.id}
-            x1={start.x}
-            y1={start.y}
-            x2={end.x}
-            y2={end.y}
-            strokeWidth={isActive ? 2 : 1.5}
-            strokeDasharray={isActive ? '6 6' : undefined}
-            strokeLinecap="round"
-            className={
-              isActive
-                ? 'animate-trail-dash stroke-guide-500'
-                : 'stroke-stroke-primary'
-            }
-            style={{
-              opacity: visible ? 1 : 0,
-              transition: reducedMotion ? 'none' : 'opacity 450ms ease',
-            }}
-          />
-        );
-      })}
-
-      {/* Stasiun diorama, terurut kedalaman agar tumpang-tindihnya benar. */}
-      {ORDERED_STATIONS.map((node) => (
-        <FlowStation
-          key={node.id}
-          id={node.id}
-          state={step.nodeStates[node.id]}
-          visible={revealedNodes.has(node.id)}
-          reducedMotion={reducedMotion}
-        />
-      ))}
-
-      {/* Packet terakhir agar berjalan di atas scene. */}
-      {step.moves.map((move) => (
-        <FlowPacket
-          key={`${runId}-${move.from}-${move.to}-${move.kind}-${move.delayMs}`}
-          move={move}
-          reducedMotion={reducedMotion}
-        />
-      ))}
     </svg>
   );
 }

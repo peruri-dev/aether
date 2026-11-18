@@ -1,4 +1,4 @@
-import { DIAGRAM, diagramNode } from './diagram';
+import { DIAGRAM, diagramNode, STATION_SCREEN } from './diagram';
 import { cuboid, cylinder, frontStrip, iso, isoEllipse, isoPoly } from './iso';
 
 import type {
@@ -262,3 +262,81 @@ export const GRID_LINES: LineSeg[] = (() => {
   }
   return lines;
 })();
+
+/**
+ * Kamera adaptif: tiap langkah membingkai hanya stasiun yang sudah muncul —
+ * close-up di awal, zoom-out bertahap saat diorama membesar (pola course acuan).
+ */
+
+/** Tinggi visual objek di atas pedestal per stasiun, dalam koordinat layar. */
+const STATION_TOP_ABOVE: Record<NodeId, number> = {
+  user: 60, // layar laptop: z 20..76
+  app: 64, // panel browser: z 16..80
+  server: 78, // rack: z 16..94
+  database: 56, // tutup silinder z 58 + tinggi ellipse-nya
+};
+
+const CAMERA_PAD = 28;
+const CAMERA_MIN_SCALE = 1;
+const CAMERA_MAX_SCALE = 1.6;
+
+/** Viewport kamera dalam koordinat scene: scale + translate ke tengah viewBox. */
+export interface CameraView {
+  scale: number;
+  tx: number;
+  ty: number;
+}
+
+/** Bounds satu stasiun di layar: pedestal + objek di atasnya + label + pill. */
+function stationBounds(id: NodeId): {
+  minX: number;
+  minY: number;
+  maxX: number;
+  maxY: number;
+} {
+  const node = diagramNode(id);
+  const c = STATION_SCREEN[id];
+  const halfW = (node.pw + DIAGRAM.platform.d) / 2 + 8;
+  return {
+    minX: c.x - halfW,
+    minY: c.y - STATION_TOP_ABOVE[id] - 10,
+    maxX: c.x + halfW,
+    maxY: c.y + DIAGRAM.labelGap + 14 + DIAGRAM.labelPill.h + 12,
+  };
+}
+
+/**
+ * Hitung kamera untuk gabungan stasiun yang terlihat. Stasiun pertama selalu
+ * disertakan agar bingkai hanya melebar (zoom-out monoton), tidak bolak-balik.
+ */
+export function cameraView(revealed: ReadonlySet<NodeId>): CameraView {
+  const ids = new Set<NodeId>(revealed);
+  ids.add('user');
+
+  let minX = Number.POSITIVE_INFINITY;
+  let minY = Number.POSITIVE_INFINITY;
+  let maxX = Number.NEGATIVE_INFINITY;
+  let maxY = Number.NEGATIVE_INFINITY;
+  for (const id of ids) {
+    const b = stationBounds(id);
+    minX = Math.min(minX, b.minX - CAMERA_PAD);
+    minY = Math.min(minY, b.minY - CAMERA_PAD);
+    maxX = Math.max(maxX, b.maxX + CAMERA_PAD);
+    maxY = Math.max(maxY, b.maxY + CAMERA_PAD);
+  }
+
+  const boxW = maxX - minX;
+  const boxH = maxY - minY;
+  const scale = Math.min(
+    CAMERA_MAX_SCALE,
+    Math.max(
+      CAMERA_MIN_SCALE,
+      Math.min(DIAGRAM.width / boxW, DIAGRAM.height / boxH),
+    ),
+  );
+  return {
+    scale,
+    tx: DIAGRAM.width / 2 - scale * ((minX + maxX) / 2),
+    ty: DIAGRAM.height / 2 - scale * ((minY + maxY) / 2),
+  };
+}
