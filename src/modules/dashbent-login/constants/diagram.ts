@@ -49,7 +49,7 @@ export const DIAGRAM = {
       gy: 0,
       pw: 76,
       label: 'Halaman Login',
-      sub: 'email + password',
+      sub: 'email dan password',
     },
     {
       id: 'password',
@@ -65,7 +65,7 @@ export const DIAGRAM = {
       gy: 0,
       pw: 76,
       label: 'Daftar TOTP',
-      sub: 'QR + kode cadangan',
+      sub: 'QR dan kode cadangan',
     },
     {
       id: 'verify',
@@ -89,7 +89,7 @@ export const DIAGRAM = {
       gy: -160,
       pw: 76,
       label: 'API Identitas',
-      sub: 'autentikasi + sesi',
+      sub: 'autentikasi dan sesi',
     },
   ] as DiagramNode[],
   edges: [
@@ -159,7 +159,7 @@ export const PACKET_FILL: Record<PacketKind, string> = {
 /** Dot legend: warna + label teks, agar informasi tidak bergantung warna saja. */
 export const PACKET_LEGEND: Record<PacketKind, { dot: string; label: string }> =
   {
-    credentials: { dot: 'bg-warning-600', label: 'kredensial' },
+    credentials: { dot: 'bg-warning-600', label: 'email dan password' },
     totp: { dot: 'bg-guide-500', label: 'kode TOTP' },
     recovery: { dot: 'bg-positive-600', label: 'kode cadangan' },
     session: { dot: 'bg-content-primary', label: 'sesi' },

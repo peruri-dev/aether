@@ -37,11 +37,11 @@ const TITLE =
   'Diagram alur login Dashbent Backoffice: Halaman Login, API Identitas, ' +
   'Ganti Password, Daftar TOTP, Verifikasi, Dashboard';
 const DESC =
-  'Diorama isometrik perjalanan login: enam stasiun halaman dan sistem ' +
-  'berdiri di atas pelat dasar, menanjak dari Halaman Login paling dekat di ' +
-  'kiri bawah hingga Dashboard paling jauh di kanan atas. Paket berwarna ' +
-  'bergerak antar stasiun: kredensial (kuning keemasan), kode TOTP (biru), ' +
-  'kode cadangan (hijau), dan sesi (netral gelap).';
+  'Diorama isometrik alur login. Enam stasiun halaman dan sistem berdiri ' +
+  'di atas pelat dasar, menanjak dari Halaman Login di kiri bawah sampai ' +
+  'Dashboard di kanan atas. Paket berwarna bergerak antar stasiun: email ' +
+  'dan password (kuning keemasan), kode TOTP (biru), kode cadangan ' +
+  '(hijau), dan sesi (abu gelap).';
 
 /** Spesifikasi stasiun scene dari konstanta modul, terurut kedalaman. */
 function stationSpecs(): StationSpec[] {

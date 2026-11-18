@@ -58,7 +58,7 @@ export function LessonStepPanel({
       </div>
       <div className="rounded-8 border-s-2 border-guide-500 bg-background-tertiary p-3">
         <p className="flex items-center gap-1.5 text-xs font-medium tracking-widest text-content-guide uppercase">
-          <TbBulb className="size-4" aria-hidden="true" /> Key idea
+          <TbBulb className="size-4" aria-hidden="true" /> Ide utama
         </p>
         <p className="mt-1.5 text-sm/relaxed text-content-secondary">
           {content.keyIdea}
@@ -89,11 +89,11 @@ export function LessonStepPanel({
       <p className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs text-content-tertiary">
         <kbd className={kbdClass}>←</kbd>
         <kbd className={kbdClass}>→</kbd>
-        langkah
+        pindah langkah
         <kbd className={kbdClass}>R</kbd>
         ulangi
         <kbd className={kbdClass}>Spasi</kbd>
-        jeda
+        jeda atau jalankan
       </p>
     </section>
   );

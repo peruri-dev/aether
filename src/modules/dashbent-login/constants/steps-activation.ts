@@ -9,19 +9,19 @@ export const STEPS_AKTIVASI: readonly FlowStep[] = [
   {
     id: 'provisioning',
     number: 1,
-    label: 'Provisioning',
+    label: 'Buat akun',
     title: 'Akun admin klien lahir di CMP',
     narration: [
-      'Tim delivery Peruri membuat klien, SystemID, dan akun admin pertama di Client Management Portal. CMP mengirim data itu ke Dashbent lewat API push dan menerbitkan password sementara.',
-      'Password sementara diserahkan langsung kepada admin klien. Dashbent hanya menyimpan hash-nya, dan password ini hanya berlaku untuk login awal.',
+      'Tim delivery Peruri membuat klien, SystemID, dan akun admin pertama di Client Management Portal (CMP). Proses ini disebut provisioning. CMP mengirim data itu ke Dashbent lewat API.',
+      'Password sementara dibuat di CMP dan diserahkan langsung oleh tim delivery kepada admin klien. Dashbent hanya menyimpan hash-nya. Password ini hanya berlaku untuk login pertama.',
     ],
     keyIdea:
-      'Tidak ada registrasi mandiri. Satu-satunya pintu masuk akun baru adalah provisioning dari CMP, sehingga setiap akun bisa ditelusuri asal-usulnya.',
+      'Tidak ada pendaftaran sendiri. Akun baru hanya bisa lahir dari provisioning CMP, sehingga asal-usul setiap akun selalu jelas.',
     moves: [],
     metrics: [
-      { id: 'status', label: 'STATUS AKUN', text: 'MENUNGGU_AKTIVASI' },
-      { id: 'failed', label: 'PERCOBAAN GAGAL', text: '0/5' },
-      { id: 'session', label: 'SESI', text: '—' },
+      { id: 'status', label: 'Status akun', text: 'MENUNGGU_AKTIVASI' },
+      { id: 'failed', label: 'Percobaan gagal', text: '0/5' },
+      { id: 'session', label: 'Sesi', text: '—' },
     ],
     nodeStates: {
       login: 'active',
@@ -39,11 +39,11 @@ export const STEPS_AKTIVASI: readonly FlowStep[] = [
     label: 'Login awal',
     title: 'Login awal dengan password sementara',
     narration: [
-      'Admin membuka Halaman Login, mengisi email dan password sementara, lalu menekan Masuk. Backend mencocokkan hash password lalu membaca status akun: MENUNGGU_AKTIVASI.',
-      'Karena statusnya begitu, backend menerbitkan sesi terbatas — hanya boleh membuka Halaman Ganti Password Wajib dan Keluar. Endpoint lain ditolak.',
+      'Admin membuka Halaman Login, mengisi email dan password sementara, lalu menekan Masuk. Backend mencocokkan hash password dan membaca status akun: MENUNGGU_AKTIVASI.',
+      'Karena itu, backend menerbitkan sesi terbatas. Sesi ini hanya boleh membuka Halaman Ganti Password Wajib dan Keluar. Endpoint lain ditolak.',
     ],
     keyIdea:
-      'Satu Halaman Login untuk semua status. Backend yang memutuskan langkah berikutnya; frontend hanya menampilkan hasilnya.',
+      'Satu Halaman Login untuk semua status. Backend yang menentukan langkah berikutnya; frontend hanya menampilkan hasilnya.',
     moves: [
       {
         from: 'login',
@@ -54,9 +54,9 @@ export const STEPS_AKTIVASI: readonly FlowStep[] = [
       },
     ],
     metrics: [
-      { id: 'status', label: 'STATUS AKUN', text: 'MENUNGGU_AKTIVASI' },
-      { id: 'failed', label: 'PERCOBAAN GAGAL', text: '0/5' },
-      { id: 'session', label: 'SESI', text: 'TERBATAS' },
+      { id: 'status', label: 'Status akun', text: 'MENUNGGU_AKTIVASI' },
+      { id: 'failed', label: 'Percobaan gagal', text: '0/5' },
+      { id: 'session', label: 'Sesi', text: 'Terbatas' },
     ],
     nodeStates: {
       login: 'active',
@@ -74,11 +74,11 @@ export const STEPS_AKTIVASI: readonly FlowStep[] = [
     label: 'Ganti password',
     title: 'Ganti password wajib sesuai standar IDDS',
     narration: [
-      'Admin wajib membuat password sendiri: 12–128 karakter dengan huruf besar, huruf kecil, angka, dan simbol. Aturan ditandai satu per satu, dan password baru tidak boleh sama dengan password sementara.',
-      'Backend memvalidasi ulang semuanya, menyimpan hash argon2/bcrypt, lalu mengubah status akun menjadi MENUNGGU_TOTP dalam satu transaksi.',
+      'Admin wajib membuat password sendiri. Panjangnya 12 hingga 128 karakter, dengan huruf besar, huruf kecil, angka, dan simbol. Halaman menandai setiap aturan satu per satu. Password baru tidak boleh sama dengan password sementara.',
+      'Backend memeriksa ulang semua aturan, menyimpan hash password baru dengan argon2 atau bcrypt, lalu mengubah status akun menjadi MENUNGGU_TOTP. Semua terjadi dalam satu transaksi.',
     ],
     keyIdea:
-      'Setelah langkah ini, tim delivery tidak lagi mengetahui password admin. Pengetahuan kredensial kembali sepenuhnya ke pemilik akun.',
+      'Setelah langkah ini, hanya admin yang tahu password barunya. Tim delivery tidak pernah mengetahui password itu.',
     moves: [
       {
         from: 'password',
@@ -89,9 +89,9 @@ export const STEPS_AKTIVASI: readonly FlowStep[] = [
       },
     ],
     metrics: [
-      { id: 'status', label: 'STATUS AKUN', text: 'MENUNGGU_TOTP' },
-      { id: 'failed', label: 'PERCOBAAN GAGAL', text: '0/5' },
-      { id: 'session', label: 'SESI', text: 'TERBATAS' },
+      { id: 'status', label: 'Status akun', text: 'MENUNGGU_TOTP' },
+      { id: 'failed', label: 'Percobaan gagal', text: '0/5' },
+      { id: 'session', label: 'Sesi', text: 'Terbatas' },
     ],
     nodeStates: {
       login: 'done',
@@ -107,20 +107,20 @@ export const STEPS_AKTIVASI: readonly FlowStep[] = [
     id: 'totp-enroll',
     number: 4,
     label: 'Daftar TOTP',
-    title: 'Pendaftaran TOTP: memindai QR',
+    title: 'Mendaftarkan TOTP dengan memindai QR',
     narration: [
-      'Backend membuat secret TOTP baru dan menampilkannya sebagai QR code plus kunci manual. Admin memindainya dengan Google Authenticator atau aplikasi sejenis.',
-      'Admin memasukkan kode 6 digit dari aplikasi. Backend menerima kode dari langkah waktu saat ini plus satu langkah sebelum dan sesudahnya, dan setiap kode hanya bisa dipakai sekali.',
+      'Backend membuat secret TOTP baru, lalu menampilkannya sebagai QR code plus kunci manual. Admin memindai QR dengan Google Authenticator atau aplikasi sejenis.',
+      'Admin memasukkan kode 6 digit dari aplikasi authenticator. Backend menerima kode dari periode waktu ini, plus satu periode sebelum dan sesudahnya. Setiap kode hanya bisa dipakai sekali.',
     ],
     keyIdea:
-      'TOTP RFC 6238 wajib untuk semua user. Email dan password saja tidak cukup membuka akun — pelaku harus punya perangkat authenticator-nya.',
+      'TOTP (RFC 6238) wajib untuk semua pengguna. Email dan password saja tidak cukup; pemilik akun juga harus punya perangkat authenticator.',
     moves: [
       { from: 'totp', to: 'api', kind: 'totp', durationMs: 800, delayMs: 0 },
     ],
     metrics: [
-      { id: 'status', label: 'STATUS AKUN', text: 'MENUNGGU_TOTP' },
-      { id: 'failed', label: 'PERCOBAAN GAGAL', text: '0/5' },
-      { id: 'session', label: 'SESI', text: 'TERBATAS' },
+      { id: 'status', label: 'Status akun', text: 'MENUNGGU_TOTP' },
+      { id: 'failed', label: 'Percobaan gagal', text: '0/5' },
+      { id: 'session', label: 'Sesi', text: 'Terbatas' },
     ],
     nodeStates: {
       login: 'done',
@@ -136,13 +136,13 @@ export const STEPS_AKTIVASI: readonly FlowStep[] = [
     id: 'recovery-codes',
     number: 5,
     label: 'Kode cadangan',
-    title: 'Sepuluh kode cadangan, hanya sekali tampil',
+    title: '10 kode cadangan, tampil hanya sekali',
     narration: [
-      'Verifikasi berhasil, sistem menerbitkan 10 kode cadangan sekali pakai — ditampilkan hanya pada layar ini, dengan tombol Salin dan Unduh.',
+      'Verifikasi berhasil. Sistem menerbitkan 10 kode cadangan sekali pakai. Kode hanya tampil di layar ini, lengkap dengan tombol Salin dan Unduh.',
       'Admin harus mencentang "Saya sudah menyimpan kode cadangan" sebelum tombol Selesai aktif. Kode disimpan sebagai hash, bukan teks asli.',
     ],
     keyIdea:
-      'Kode cadangan adalah jaring pengaman saat perangkat hilang. Memakai satu kode memaksa pendaftaran ulang TOTP dan mengganti seluruh set kode.',
+      'Kode cadangan menyelamatkan akses saat perangkat hilang. Satu kode terpakai memaksa pendaftaran ulang TOTP, lalu sistem mengganti seluruh kodenya.',
     moves: [
       {
         from: 'api',
@@ -153,9 +153,9 @@ export const STEPS_AKTIVASI: readonly FlowStep[] = [
       },
     ],
     metrics: [
-      { id: 'status', label: 'STATUS AKUN', text: 'MENUNGGU_TOTP' },
-      { id: 'failed', label: 'PERCOBAAN GAGAL', text: '0/5' },
-      { id: 'session', label: 'SESI', text: 'TERBATAS' },
+      { id: 'status', label: 'Status akun', text: 'MENUNGGU_TOTP' },
+      { id: 'failed', label: 'Percobaan gagal', text: '0/5' },
+      { id: 'session', label: 'Sesi', text: 'Terbatas' },
     ],
     nodeStates: {
       login: 'done',
