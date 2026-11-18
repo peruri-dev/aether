@@ -60,4 +60,10 @@ describe('STEPS', () => {
       expect(Object.keys(step.nodeStates)).toEqual([...NODE_IDS]);
     }
   });
+
+  it('setiap stasiun reveal tepat satu kali di seluruh langkah', () => {
+    const revealed = STEPS.flatMap((step) => step.reveals);
+    expect(new Set(revealed).size).toBe(revealed.length);
+    expect(new Set(revealed)).toEqual(new Set(NODE_IDS));
+  });
 });

@@ -108,4 +108,30 @@ describe('SystemFlowView', () => {
     await user.click(screen.getByTestId('system-flow.button.theme.click'));
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
   });
+
+  it('stasiun diorama muncul bertahap mengikuti langkah', async () => {
+    const user = userEvent.setup();
+    render(<SystemFlowView />);
+
+    // langkah 1: baru pengguna + website yang tampil
+    expect(
+      document.querySelectorAll('[data-node-id]:not([aria-hidden="true"])'),
+    ).toHaveLength(2);
+    expect(
+      document.querySelectorAll('[data-node-id][aria-hidden="true"]'),
+    ).toHaveLength(2);
+
+    await user.click(screen.getByTestId('system-flow.button.next.click'));
+    await user.click(screen.getByTestId('system-flow.button.next.click'));
+    // langkah 3: server muncul, database masih tersembunyi
+    expect(
+      document.querySelectorAll('[data-node-id][aria-hidden="true"]'),
+    ).toHaveLength(1);
+
+    await user.click(screen.getByTestId('system-flow.button.next.click'));
+    // langkah 4: semua stasiun sudah tampil
+    expect(
+      document.querySelectorAll('[data-node-id][aria-hidden="true"]'),
+    ).toHaveLength(0);
+  });
 });

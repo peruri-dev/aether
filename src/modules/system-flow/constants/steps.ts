@@ -41,6 +41,7 @@ export const STEPS: readonly FlowStep[] = [
       server: 'idle',
       database: 'idle',
     },
+    reveals: ['user', 'app'],
   },
   {
     id: 'render-shell',
@@ -65,6 +66,7 @@ export const STEPS: readonly FlowStep[] = [
       server: 'idle',
       database: 'idle',
     },
+    reveals: [],
   },
   {
     id: 'send-request',
@@ -97,6 +99,7 @@ export const STEPS: readonly FlowStep[] = [
       server: 'active',
       database: 'idle',
     },
+    reveals: ['server'],
   },
   {
     id: 'db-query',
@@ -127,6 +130,7 @@ export const STEPS: readonly FlowStep[] = [
       server: 'active',
       database: 'active',
     },
+    reveals: ['database'],
   },
   {
     id: 'db-reply',
@@ -158,6 +162,7 @@ export const STEPS: readonly FlowStep[] = [
       server: 'active',
       database: 'done',
     },
+    reveals: [],
   },
   {
     id: 'ui-update',
@@ -191,6 +196,7 @@ export const STEPS: readonly FlowStep[] = [
     ],
     metrics: [{ id: 'download', label: 'DOWNLOAD', valueMs: 21 }],
     nodeStates: { user: 'done', app: 'done', server: 'done', database: 'done' },
+    reveals: [],
   },
 ];
 

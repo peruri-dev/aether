@@ -67,15 +67,21 @@ export function Shape({
 interface FlowStationProps {
   id: NodeId;
   state: NodeState;
+  /** False selama stasiun belum di-reveal: tersembunyi dan tak terbaca screen reader. */
+  visible: boolean;
+  reducedMotion: boolean;
 }
 
 /**
  * Satu stasiun diorama: cincin ping (bila aktif), pedestal, objek, label,
  * dan pill keterangan — semua dari bentuk precomputed di constants.
+ * Reveal progresif: fade + naik dari "tanah", terputus saat reduced motion.
  */
 export default function FlowStation({
   id,
   state,
+  visible,
+  reducedMotion,
 }: Readonly<FlowStationProps>): React.JSX.Element {
   const node = diagramNode(id);
   const station = STATION_SHAPES[id];
@@ -86,7 +92,17 @@ export default function FlowStation({
   const pillY = center.y + DIAGRAM.labelGap + 14;
 
   return (
-    <g>
+    <g
+      data-node-id={id}
+      aria-hidden={!visible}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'none' : 'translateY(12px)',
+        transition: reducedMotion
+          ? 'none'
+          : 'opacity 450ms ease, transform 450ms cubic-bezier(0.16, 1, 0.3, 1)',
+      }}
+    >
       {state === 'active' ? (
         <ellipse
           cx={ping.x}

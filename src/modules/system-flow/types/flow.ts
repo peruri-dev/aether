@@ -43,4 +43,6 @@ export interface FlowStep {
   /** Metric yang diungkap langkah ini; HUD menampilkan gabungan langkah 0..aktif. */
   metrics: HudMetric[];
   nodeStates: Record<NodeId, NodeState>;
+  /** Stasiun yang muncul di langkah ini (progressive disclosure, seperti acuan). */
+  reveals: readonly NodeId[];
 }

@@ -16,7 +16,7 @@ import {
   SLAB_TOP_POINTS,
 } from '../constants/diagram-shapes';
 
-import type { FlowStep, PacketMove } from '../types/flow';
+import type { FlowStep, NodeId, PacketMove } from '../types/flow';
 import type React from 'react';
 
 /** Urutan gambar stasiun: yang paling jauh (gx+gy terkecil) lebih dulu. */
@@ -83,6 +83,8 @@ interface FlowDiagramProps {
   step: FlowStep;
   /** Dioper dari mesin flow; berubah saat replay agar semua packet di-remount. */
   runId: number;
+  /** Stasiun yang sudah muncul (gabungan reveals langkah 0..aktif). */
+  revealedNodes: ReadonlySet<NodeId>;
   reducedMotion: boolean;
 }
 
@@ -90,6 +92,7 @@ interface FlowDiagramProps {
 export default function FlowDiagram({
   step,
   runId,
+  revealedNodes,
   reducedMotion,
 }: Readonly<FlowDiagramProps>): React.JSX.Element {
   const titleId = useId();
@@ -145,10 +148,13 @@ export default function FlowDiagram({
         ))}
       </g>
 
-      {/* Jalur antar stasiun: menyala saat ada packet melintas di langkah ini. */}
+      {/* Jalur antar stasiun: muncul bersama kedua ujungnya, menyala saat
+          ada packet melintas di langkah ini. */}
       {DIAGRAM.edges.map((edge) => {
         const { start, end } = edgeEnds(edge.from, edge.to);
         const isActive = activeEdges.has(edgePairKey(edge.from, edge.to));
+        const visible =
+          revealedNodes.has(edge.from) && revealedNodes.has(edge.to);
         return (
           <line
             key={edge.id}
@@ -164,6 +170,10 @@ export default function FlowDiagram({
                 ? 'animate-trail-dash stroke-guide-500'
                 : 'stroke-stroke-primary'
             }
+            style={{
+              opacity: visible ? 1 : 0,
+              transition: reducedMotion ? 'none' : 'opacity 450ms ease',
+            }}
           />
         );
       })}
@@ -174,6 +184,8 @@ export default function FlowDiagram({
           key={node.id}
           id={node.id}
           state={step.nodeStates[node.id]}
+          visible={revealedNodes.has(node.id)}
+          reducedMotion={reducedMotion}
         />
       ))}
 

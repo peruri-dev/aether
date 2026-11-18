@@ -33,6 +33,15 @@ export default function SystemFlowView({
     [machine.stepIndex],
   );
 
+  // Progressive disclosure: stasiun baru muncul saat pertama terlibat alur.
+  const revealedNodes = useMemo(
+    () =>
+      new Set(
+        STEPS.slice(0, machine.stepIndex + 1).flatMap((entry) => entry.reveals),
+      ),
+    [machine.stepIndex],
+  );
+
   // Pintasan keyboard. Dilewati saat mengetik di input atau dengan modifier,
   // dan Spasi tidak mengambil alih tombol yang sedang difokus.
   useEffect(() => {
@@ -138,6 +147,7 @@ export default function SystemFlowView({
           <FlowDiagram
             step={step}
             runId={machine.runId}
+            revealedNodes={revealedNodes}
             reducedMotion={machine.reducedMotion}
           />
           <FlowLegend />
