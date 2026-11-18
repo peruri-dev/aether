@@ -47,6 +47,18 @@ export const DIAGRAM = {
    */
   labelGapAbove: 110,
   labelPill: { w: 140, h: 24 },
+  /**
+   * Geser caption ke kanan-bawah (menjauhi tetangga di kiri-bawah) untuk
+   * stasiun yang captionnya akan menginjak pedestal/objek stasiun tetangga
+   * kirinya bila tetap di tengah. Jarak antar stasiun baris (105px layar)
+   * lebih sempit daripada lebar pill (140px), jadi tiga caption terakhir
+   * digeser sejajar permukaan pelat.
+   */
+  captionShift: {
+    totp: { x: 40, y: 20 },
+    verify: { x: 40, y: 20 },
+    dashboard: { x: 40, y: 20 },
+  } as Partial<Record<NodeId, XY>>,
   /** Trim ujung jalur packet agar tidak menabrak pedestal. */
   edgeTrim: 28,
   stations: [

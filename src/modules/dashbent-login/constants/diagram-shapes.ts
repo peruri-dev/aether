@@ -231,6 +231,7 @@ function stationBounds(id: NodeId): Bounds {
   const c = STATION_SCREEN[id];
   const halfW = (node.pw + D) / 2 + 8;
   const captionAbove = id === 'api';
+  const shift = DIAGRAM.captionShift[id];
   return {
     minX: c.x - halfW,
     minY:
@@ -238,12 +239,13 @@ function stationBounds(id: NodeId): Bounds {
       (captionAbove
         ? DIAGRAM.labelGapAbove + 14 + DIAGRAM.labelPill.h + 12
         : STATION_TOP_ABOVE[id] + 10),
-    maxX: c.x + halfW,
+    maxX: c.x + halfW + (shift?.x ?? 0),
     maxY:
       c.y +
       (captionAbove
         ? DIAGRAM.platform.h + 32
-        : DIAGRAM.labelGap + 14 + DIAGRAM.labelPill.h + 12),
+        : DIAGRAM.labelGap + 14 + DIAGRAM.labelPill.h + 12) +
+      (shift?.y ?? 0),
   };
 }
 

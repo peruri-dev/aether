@@ -60,6 +60,7 @@ function stationSpecs(): StationSpec[] {
       ? DIAGRAM.labelGapAbove
       : DIAGRAM.labelGap,
     labelAbove: LABEL_ABOVE_IDS.has(node.id),
+    captionOffset: DIAGRAM.captionShift[node.id],
     pill: DIAGRAM.labelPill,
   }));
 }

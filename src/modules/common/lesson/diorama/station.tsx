@@ -108,6 +108,11 @@ export interface StationSpec {
   pill: { w: number; h: number };
   /** Label dan pill di atas objek, bukan di bawah pedestal (stasiun baris belakang). */
   labelAbove?: boolean;
+  /**
+   * Geser caption dari pusat pedestal, untuk caption yang akan menginjak
+   * pedestal/objek stasiun tetangga bila tetap di tengah.
+   */
+  captionOffset?: XY | undefined;
 }
 
 interface DioramaStationProps {
@@ -228,15 +233,17 @@ export function DioramaStationCaption({
 }: Readonly<DioramaStationCaptionProps>): React.JSX.Element {
   const style = NODE_STYLE[state];
   const shown = useDropReveal(visible, reducedMotion);
-  const labelY = spec.labelAbove
-    ? spec.screen.y - spec.labelGap
-    : spec.screen.y + spec.labelGap;
+  const captionX = spec.screen.x + (spec.captionOffset?.x ?? 0);
+  const labelY =
+    (spec.labelAbove
+      ? spec.screen.y - spec.labelGap
+      : spec.screen.y + spec.labelGap) + (spec.captionOffset?.y ?? 0);
   const pillY = spec.labelAbove ? labelY - 14 - spec.pill.h : labelY + 14;
 
   return (
     <g aria-hidden={!visible} style={dropStyle(shown, reducedMotion)}>
       <text
-        x={spec.screen.x}
+        x={captionX}
         y={labelY}
         textAnchor="middle"
         fontSize={13}
@@ -246,7 +253,7 @@ export function DioramaStationCaption({
         {spec.label}
       </text>
       <rect
-        x={spec.screen.x - spec.pill.w / 2}
+        x={captionX - spec.pill.w / 2}
         y={pillY}
         width={spec.pill.w}
         height={spec.pill.h}
@@ -255,7 +262,7 @@ export function DioramaStationCaption({
         className="fill-background-tertiary stroke-stroke-primary"
       />
       <text
-        x={spec.screen.x}
+        x={captionX}
         y={pillY + spec.pill.h / 2 + 3.5}
         textAnchor="middle"
         fontSize={10}
