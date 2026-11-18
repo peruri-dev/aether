@@ -220,6 +220,17 @@ export function getStep(index: number): FlowStep {
   return step;
 }
 
+/**
+ * Parse param path langkah (mis. "3" dari /system-flow/3) menjadi nomor
+ * langkah. null berarti tidak valid — halaman .astro menjawab 404.
+ */
+export function parseStepParam(raw: string | undefined): number | null {
+  if (raw === undefined || !/^\d+$/.test(raw)) return null;
+  const value = Number.parseInt(raw, 10);
+  if (value < 1 || value > STEPS.length) return null;
+  return value;
+}
+
 /** Jeda autoplay satu langkah: rantai hop terlama + waktu baca. */
 export function stepPaceMs(step: FlowStep): number {
   const moveMs = Math.max(

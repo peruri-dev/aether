@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
+import { buildSystemFlowStepUrl } from '@/modules/common/auth/route-permissions';
+
 import { useReducedMotion } from './use-reduced-motion';
 import {
   getStep,
@@ -25,16 +27,36 @@ export interface FlowMachine {
   togglePlay: () => void;
 }
 
+export interface FlowMachineOptions {
+  /** Indeks langkah awal dari URL (dioper .astro); default langkah pertama. */
+  initialStepIndex?: number;
+}
+
 /**
  * Mesin state pelajaran: langkah aktif, autoplay, dan kontrolnya.
  * Autoplay memajukan langkah per langkah lalu berhenti di langkah terakhir;
  * `goTo` menghentikan autoplay agar pelajar tetap memegang kendali.
  */
-export function useFlowMachine(): FlowMachine {
+export function useFlowMachine({
+  initialStepIndex = 0,
+}: FlowMachineOptions = {}): FlowMachine {
   const reducedMotion = useReducedMotion();
-  const [stepIndex, setStepIndex] = useState(0);
+  const [stepIndex, setStepIndex] = useState(() =>
+    Math.min(Math.max(initialStepIndex, 0), LAST_STEP_INDEX),
+  );
   const [playing, setPlaying] = useState(false);
   const [runId, setRunId] = useState(0);
+
+  // Langkah aktif disimpan di URL path (aturan state di URL): refresh tidak
+  // mengembalikan pelajar ke awal. replaceState agar autoplay tidak membanjiri
+  // riwayat browser; tombol Back tetap keluar dari halaman seperti biasa.
+  useEffect(() => {
+    window.history.replaceState(
+      null,
+      '',
+      buildSystemFlowStepUrl(stepIndex + 1),
+    );
+  }, [stepIndex]);
 
   useEffect(() => {
     if (!playing || reducedMotion) return;

@@ -18,6 +18,11 @@ export const AUTH_REDIRECT_REASONS = {
 export type AuthRedirectReason =
   (typeof AUTH_REDIRECT_REASONS)[keyof typeof AUTH_REDIRECT_REASONS];
 
+/** URL satu langkah pelajaran system-flow (1..6); langkah disimpan di URL path. */
+export function buildSystemFlowStepUrl(step: number): string {
+  return `${ROUTES.systemFlow}/${step}`;
+}
+
 /** URL login yang membawa halaman asal (returnTo) dan alasan redirect. */
 export function buildLoginUrl(
   returnTo?: string,

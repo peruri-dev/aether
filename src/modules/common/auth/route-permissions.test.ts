@@ -1,6 +1,17 @@
 import { describe, expect, it } from 'vitest';
 
-import { AUTH_REDIRECT_REASONS, buildLoginUrl } from './route-permissions';
+import {
+  AUTH_REDIRECT_REASONS,
+  buildLoginUrl,
+  buildSystemFlowStepUrl,
+} from './route-permissions';
+
+describe('buildSystemFlowStepUrl', () => {
+  it('menyusun path langkah pelajaran', () => {
+    expect(buildSystemFlowStepUrl(1)).toBe('/system-flow/1');
+    expect(buildSystemFlowStepUrl(3)).toBe('/system-flow/3');
+  });
+});
 
 describe('buildLoginUrl', () => {
   it('tanpa parameter', () => {

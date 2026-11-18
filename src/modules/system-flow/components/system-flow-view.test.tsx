@@ -109,6 +109,24 @@ describe('SystemFlowView', () => {
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
   });
 
+  it('langkah awal diambil dari prop initialStep (refresh-safe)', () => {
+    render(<SystemFlowView initialStep={3} />);
+    expect(screen.getByRole('status')).toHaveTextContent('Langkah 3 dari 6');
+    // langkah 3: tiga stasiun tampil, database masih tersembunyi
+    expect(
+      document.querySelectorAll('[data-node-id][aria-hidden="true"]'),
+    ).toHaveLength(1);
+  });
+
+  it('perubahan langkah tersimpan di URL path', async () => {
+    const user = userEvent.setup();
+    window.history.replaceState(null, '', '/system-flow/2');
+    render(<SystemFlowView initialStep={2} />);
+
+    await user.click(screen.getByTestId('system-flow.button.next.click'));
+    expect(window.location.pathname).toBe('/system-flow/3');
+  });
+
   it('stasiun diorama muncul bertahap mengikuti langkah', async () => {
     const user = userEvent.setup();
     render(<SystemFlowView />);

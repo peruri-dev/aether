@@ -29,6 +29,27 @@ describe('useFlowMachine', () => {
     expect(result.current.step.number).toBe(1);
   });
 
+  it('initialStepIndex memulai di langkah tersebut dan tetap di-clamp', () => {
+    const { result } = renderHook(() =>
+      useFlowMachine({ initialStepIndex: 2 }),
+    );
+    expect(result.current.stepIndex).toBe(2);
+    expect(result.current.step.number).toBe(3);
+
+    const clamped = renderHook(() => useFlowMachine({ initialStepIndex: 99 }));
+    expect(clamped.result.current.stepIndex).toBe(5);
+  });
+
+  it('langkah aktif disinkronkan ke URL path', () => {
+    const { result } = renderHook(() => useFlowMachine());
+    expect(window.location.pathname).toBe('/system-flow/1');
+
+    act(() => {
+      result.current.goTo(2);
+    });
+    expect(window.location.pathname).toBe('/system-flow/3');
+  });
+
   it('next dan prev di-clamp di batas', () => {
     const { result } = renderHook(() => useFlowMachine());
 

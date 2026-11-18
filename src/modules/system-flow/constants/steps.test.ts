@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { DIAGRAM, edgePairKey } from './diagram';
-import { STEPS, TOTAL_MS } from './steps';
+import { parseStepParam, STEPS, TOTAL_MS } from './steps';
 
 import type { NodeId } from '../types/flow';
 
@@ -65,5 +65,22 @@ describe('STEPS', () => {
     const revealed = STEPS.flatMap((step) => step.reveals);
     expect(new Set(revealed).size).toBe(revealed.length);
     expect(new Set(revealed)).toEqual(new Set(NODE_IDS));
+  });
+});
+
+describe('parseStepParam', () => {
+  it('menerima nomor langkah valid', () => {
+    expect(parseStepParam('1')).toBe(1);
+    expect(parseStepParam('3')).toBe(3);
+    expect(parseStepParam('6')).toBe(6);
+  });
+
+  it('menolak nilai di luar rentang, non-angka, dan kosong', () => {
+    expect(parseStepParam('0')).toBeNull();
+    expect(parseStepParam('7')).toBeNull();
+    expect(parseStepParam('-2')).toBeNull();
+    expect(parseStepParam('3x')).toBeNull();
+    expect(parseStepParam('abc')).toBeNull();
+    expect(parseStepParam(undefined)).toBeNull();
   });
 });

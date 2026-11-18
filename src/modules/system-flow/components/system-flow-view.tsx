@@ -16,13 +16,16 @@ import type React from 'react';
 export interface SystemFlowViewProps {
   /** Nama brand di header; dioper dari .astro (PUBLIC_BRAND). */
   brand?: string;
+  /** Nomor langkah awal dari URL (1..6); dioper .astro agar refresh tidak reset. */
+  initialStep?: number;
 }
 
 /** Halaman pelajaran interaktif: alur request dari pengguna sampai database. */
 export default function SystemFlowView({
   brand = 'Aether',
+  initialStep = 1,
 }: Readonly<SystemFlowViewProps>): React.JSX.Element {
-  const machine = useFlowMachine();
+  const machine = useFlowMachine({ initialStepIndex: initialStep - 1 });
   const { step, next, prev, replay, togglePlay } = machine;
   const isLastStep = machine.stepIndex === machine.stepCount - 1;
   const nextStep = STEPS.at(machine.stepIndex + 1);
