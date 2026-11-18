@@ -6,6 +6,7 @@ export const ROUTES = {
   home: '/',
   login: '/login',
   accessDenied: '/access-denied',
+  systemFlow: '/system-flow',
 } as const;
 
 /** Alasan redirect ke login, dibaca halaman login untuk menampilkan pesan. */

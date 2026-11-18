@@ -143,6 +143,50 @@
       transform: scale(1);
     }
   }
+
+  /* Efek diagram alur (system-flow). Loop kosmetik dimatikan di bawah saat reduce. */
+  --animate-packet-pulse: packet-pulse 1.3s ease-in-out infinite;
+  --animate-node-ping: node-ping 1.4s ease-out infinite;
+  --animate-trail-dash: trail-dash 1.2s linear infinite;
+  --animate-hud-pop: hud-pop 240ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  @keyframes packet-pulse {
+    0%,
+    100% {
+      opacity: 0.55;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes node-ping {
+    from {
+      opacity: 0.9;
+      transform: scale(0.6);
+    }
+    to {
+      opacity: 0;
+      transform: scale(1.6);
+    }
+  }
+
+  @keyframes trail-dash {
+    to {
+      stroke-dashoffset: -24;
+    }
+  }
+
+  @keyframes hud-pop {
+    from {
+      opacity: 0;
+      transform: translateY(4px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
 }
 
 /*
@@ -186,5 +230,17 @@
     &::after {
       animation: none;
     }
+  }
+}
+
+/*
+ * Loop animasi diagram alur hanya kosmetik: matikan penuh saat pengguna meminta gerak minimal.
+ * Perjalanan packet sendiri digerakkan state React (transition transform), bukan keyframe di sini.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .animate-packet-pulse,
+  .animate-node-ping,
+  .animate-trail-dash {
+    animation: none;
   }
 }
