@@ -1,0 +1,7 @@
+---
+import { buildDashbentLoginStepUrl } from '@/modules/common/auth/route-permissions';
+
+// Root pelajaran menuju langkah pertama; URL kanonik per langkah ada di
+// [step].astro (ROUTES.dashbentLoginFlow/<langkah>).
+return Astro.redirect(buildDashbentLoginStepUrl(1));
+---

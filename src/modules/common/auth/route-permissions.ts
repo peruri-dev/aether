@@ -7,6 +7,7 @@ export const ROUTES = {
   login: '/login',
   accessDenied: '/access-denied',
   systemFlow: '/system-flow',
+  dashbentLoginFlow: '/dashbent/login-flow',
 } as const;
 
 /** Alasan redirect ke login, dibaca halaman login untuk menampilkan pesan. */
@@ -21,6 +22,11 @@ export type AuthRedirectReason =
 /** URL satu langkah pelajaran system-flow (1..6); langkah disimpan di URL path. */
 export function buildSystemFlowStepUrl(step: number): string {
   return `${ROUTES.systemFlow}/${step}`;
+}
+
+/** URL satu langkah pelajaran login Dashbent (1..10); langkah di URL path. */
+export function buildDashbentLoginStepUrl(step: number): string {
+  return `${ROUTES.dashbentLoginFlow}/${step}`;
 }
 
 /** URL login yang membawa halaman asal (returnTo) dan alasan redirect. */

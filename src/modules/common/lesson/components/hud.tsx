@@ -22,16 +22,18 @@ function HudTile({
       <p className="text-xs font-medium tracking-widest text-content-tertiary uppercase">
         {metric.label}
       </p>
-      <p className="mt-1 text-lg font-semibold text-content-primary tabular-nums">
-        {metric.valueMs !== undefined ? (
-          <>
-            {value}
-            <span className="text-content-tertiary"> ms</span>
-          </>
-        ) : (
-          metric.text
-        )}
-      </p>
+      {/* tile ms: angka besar; tile teks: lebih kecil dan boleh wrap agar
+          nilai panjang (mis. MENUNGGU_AKTIVASI) tidak terpotong */}
+      {metric.valueMs !== undefined ? (
+        <p className="mt-1 text-lg font-semibold text-content-primary tabular-nums">
+          {value}
+          <span className="text-content-tertiary"> ms</span>
+        </p>
+      ) : (
+        <p className="mt-1 text-sm/6 font-semibold wrap-break-word text-content-primary">
+          {metric.text}
+        </p>
+      )}
     </div>
   );
 }
