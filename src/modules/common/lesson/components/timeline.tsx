@@ -94,7 +94,9 @@ export function LessonTimeline({
                     'grid size-8 place-items-center rounded-full border text-sm font-semibold tabular-nums transition-colors duration-300',
                     isActive
                       ? 'animate-hud-pop border-guide-500 bg-guide-500 text-content-on-brand'
-                      : 'border-stroke-primary bg-background-tertiary text-content-tertiary',
+                      : index < activeIndex
+                        ? 'border-guide-500 bg-background-tertiary text-content-guide'
+                        : 'border-stroke-primary bg-background-tertiary text-content-tertiary',
                   )}
                 >
                   {step.number}

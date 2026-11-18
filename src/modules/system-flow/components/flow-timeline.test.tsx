@@ -45,7 +45,7 @@ describe('FlowTimeline', () => {
     expect(onSelect).toHaveBeenCalledWith(3);
   });
 
-  it('warna chip: aktif solid, langkah lain netral seragam', () => {
+  it('warna chip: aktif solid, tercapai tint guide, mendatang netral', () => {
     setup(2);
 
     const active = screen.getByRole('button', { name: 'Langkah 3: Request' });
@@ -54,11 +54,13 @@ describe('FlowTimeline', () => {
     const reached = screen.getByRole('button', {
       name: 'Langkah 1: Buka situs',
     });
-    expect(reached.firstElementChild).toHaveClass('bg-background-tertiary');
+    expect(reached.firstElementChild).toHaveClass('border-guide-500');
+    expect(reached.firstElementChild).toHaveClass('text-content-guide');
 
     const upcoming = screen.getByRole('button', {
       name: 'Langkah 6: Response',
     });
-    expect(upcoming.firstElementChild).toHaveClass('bg-background-tertiary');
+    expect(upcoming.firstElementChild).toHaveClass('border-stroke-primary');
+    expect(upcoming.firstElementChild).toHaveClass('text-content-tertiary');
   });
 });
