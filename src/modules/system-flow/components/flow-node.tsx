@@ -33,14 +33,30 @@ export function Shape({
         strokeLinejoin: 'round' as const,
       }
     : {};
+  const opacity =
+    shape.kind === 'circle' || shape.opacity === undefined
+      ? undefined
+      : shape.opacity;
 
   if (shape.kind === 'polygon') {
     return (
-      <polygon points={shape.points} fill={ISO_FILL[shape.fill]} {...stroke} />
+      <polygon
+        points={shape.points}
+        fill={ISO_FILL[shape.fill]}
+        opacity={opacity}
+        {...stroke}
+      />
     );
   }
   if (shape.kind === 'path') {
-    return <path d={shape.d} fill={ISO_FILL[shape.fill]} {...stroke} />;
+    return (
+      <path
+        d={shape.d}
+        fill={ISO_FILL[shape.fill]}
+        opacity={opacity}
+        {...stroke}
+      />
+    );
   }
   if (shape.kind === 'ellipse') {
     return (
@@ -50,6 +66,7 @@ export function Shape({
         rx={shape.rx}
         ry={shape.ry}
         fill={ISO_FILL[shape.fill]}
+        opacity={opacity}
         {...stroke}
       />
     );

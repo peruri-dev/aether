@@ -168,15 +168,33 @@ export type IsoFillKey =
   | 'detail'
   | 'screenTile'
   | 'led'
-  | 'ledWarm';
+  | 'ledWarm'
+  | 'figureShadow'
+  | 'figureCloth1'
+  | 'figureCloth2'
+  | 'figureCloth3'
+  | 'figureCloth4'
+  | 'figureCloth5';
 
 /**
  * Bentuk precomputed untuk dirender generik oleh flow-node.
  * `fill` adalah key ISO_FILL; `stroke` berarti digaris dengan warna stroke objek.
  */
 export type IsoShape =
-  | { kind: 'polygon'; points: string; fill: IsoFillKey; stroke: boolean }
-  | { kind: 'path'; d: string; fill: IsoFillKey; stroke: boolean }
+  | {
+      kind: 'polygon';
+      points: string;
+      fill: IsoFillKey;
+      stroke: boolean;
+      opacity?: number;
+    }
+  | {
+      kind: 'path';
+      d: string;
+      fill: IsoFillKey;
+      stroke: boolean;
+      opacity?: number;
+    }
   | {
       kind: 'ellipse';
       cx: number;
@@ -185,6 +203,7 @@ export type IsoShape =
       ry: number;
       fill: IsoFillKey;
       stroke: boolean;
+      opacity?: number;
     }
   | {
       kind: 'circle';

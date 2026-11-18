@@ -1,4 +1,5 @@
 import { DIAGRAM, diagramNode, STATION_SCREEN } from './diagram';
+import { userCrowdShapes } from './diagram-figures';
 import { cuboid, cylinder, frontStrip, iso, isoEllipse, isoPoly } from './iso';
 
 import type {
@@ -31,6 +32,12 @@ export const ISO_FILL = {
   screenTile: 'var(--color-guide-200)',
   led: 'var(--color-positive-600)',
   ledWarm: 'var(--color-warning-600)',
+  figureShadow: 'var(--color-neutral-900)',
+  figureCloth1: 'var(--color-chart-categorical-01)',
+  figureCloth2: 'var(--color-chart-categorical-04)',
+  figureCloth3: 'var(--color-chart-categorical-07)',
+  figureCloth4: 'var(--color-chart-categorical-09)',
+  figureCloth5: 'var(--color-chart-categorical-02)',
 } as const satisfies Record<IsoFillKey, string>;
 
 const O: XY = DIAGRAM.offset;
@@ -88,19 +95,9 @@ function buildObject(nodeId: NodeId): IsoShape[] {
   const oy = node.gy - DIAGRAM.platform.d / 2;
 
   if (nodeId === 'user') {
-    const sx = ox + 6;
-    const faceY = oy + 8;
-    return [
-      // layar laptop (paling belakang); kakinya tenggelam ke papan ketik agar
-      // sambungan terlihat menyatu, lalu papan ketik menutupi bagian bawahnya
-      ...box(sx, oy + 8, 84, 8, 56, 20),
-      ...box(sx, oy, 84, 50, 8, 16),
-      // blok UI di layar
-      strip(sx, faceY, 84, 62, 70, 6, 'screenTile'),
-      strip(sx, faceY, 56, 50, 54, 6, 'detail'),
-      strip(sx, faceY, 56, 42, 46, 6, 'detail'),
-      strip(sx + 60, faceY, 24, 30, 48, 0, 'screenTile'),
-    ];
+    // Kerumunan pengunjung kecil menggantikan satu laptop — mengikuti gaya
+    // lesson acuan yang menggambarkan pengguna sebagai massa orang.
+    return userCrowdShapes(node);
   }
 
   if (nodeId === 'app') {
@@ -270,7 +267,7 @@ export const GRID_LINES: LineSeg[] = (() => {
 
 /** Tinggi visual objek di atas pedestal per stasiun, dalam koordinat layar. */
 const STATION_TOP_ABOVE: Record<NodeId, number> = {
-  user: 60, // layar laptop: z 20..76
+  user: 36, // kepala figur kerumunan ~25px di atas pedestal
   app: 64, // panel browser: z 16..80
   server: 78, // rack: z 16..94
   database: 56, // tutup silinder z 58 + tinggi ellipse-nya

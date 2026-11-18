@@ -111,4 +111,21 @@ describe('bentuk stasiun', () => {
       expect(ISO_FILL).toHaveProperty(shape.fill);
     }
   });
+
+  it('stasiun user berupa kerumunan lima figur (bayangan, tubuh, kepala)', () => {
+    const figures = STATION_SHAPES['user']?.object ?? [];
+    expect(figures).toHaveLength(15);
+    // kepala = ellipse lingkaran (rx === ry); bayangan = ellipse pipih 2:1
+    const heads = figures.filter(
+      (shape) => shape.kind === 'ellipse' && shape.rx === shape.ry,
+    );
+    expect(heads).toHaveLength(5);
+    // pakaian figur beragam, tidak semua satu warna
+    const clothes = new Set(
+      figures
+        .filter((shape) => shape.kind === 'path')
+        .map((shape) => shape.fill),
+    );
+    expect(clothes.size).toBeGreaterThanOrEqual(5);
+  });
 });

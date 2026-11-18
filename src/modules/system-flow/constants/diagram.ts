@@ -37,7 +37,7 @@ export const DIAGRAM = {
   gridStep: 40,
   platform: { d: 50, h: 16 },
   /** Jarak label/pill di bawah pusat stasiun. */
-  labelGap: 44,
+  labelGap: 50,
   labelPill: { w: 150, h: 24 },
   /** Trim ujung jalur packet agar tidak menabrak pedestal. */
   edgeTrim: 28,
