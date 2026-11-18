@@ -2,21 +2,33 @@ import { useEffect, useState } from 'react';
 
 import { cx } from '@/modules/common/styles/cx';
 
-import {
-  DIAGRAM,
-  diagramNode,
-  NODE_STYLE,
-  STATION_SCREEN,
-} from '../constants/diagram';
-import {
-  ISO_FILL,
-  STATION_PING,
-  STATION_SHAPES,
-} from '../constants/diagram-shapes';
+import { ISO_FILL } from './palette';
 
-import type { IsoShape } from '../constants/iso';
-import type { NodeId, NodeState } from '../types/flow';
+import type { IsoEllipse, IsoShape, StationShapes, XY } from './iso';
+import type { NodeState } from '../types';
 import type React from 'react';
+
+/** Class garis dan teks node per visual state. */
+export const NODE_STYLE: Record<
+  NodeState,
+  { stroke: string; label: string; sub: string }
+> = {
+  idle: {
+    stroke: 'stroke-stroke-tertiary',
+    label: 'fill-content-secondary',
+    sub: 'fill-content-tertiary',
+  },
+  active: {
+    stroke: 'stroke-guide-500',
+    label: 'fill-content-primary',
+    sub: 'fill-content-secondary',
+  },
+  done: {
+    stroke: 'stroke-stroke-secondary',
+    label: 'fill-content-primary',
+    sub: 'fill-content-secondary',
+  },
+};
 
 interface ShapeProps {
   shape: IsoShape;
@@ -24,7 +36,7 @@ interface ShapeProps {
 }
 
 /** Render satu bentuk isometrik precomputed dengan warna dari token. */
-export function Shape({
+export function DioramaShape({
   shape,
   strokeClass,
 }: Readonly<ShapeProps>): React.JSX.Element {
@@ -83,8 +95,21 @@ export function Shape({
   );
 }
 
-interface FlowStationProps {
-  id: NodeId;
+/** Data satu stasiun yang sudah precomputed di constants lesson. */
+export interface StationSpec {
+  id: string;
+  label: string;
+  sub: string;
+  /** Pusat atas pedestal, dalam koordinat layar. */
+  screen: XY;
+  ping: IsoEllipse;
+  shapes: StationShapes;
+  labelGap: number;
+  pill: { w: number; h: number };
+}
+
+interface DioramaStationProps {
+  spec: StationSpec;
   state: NodeState;
   /** False selama stasiun belum di-reveal: tersembunyi dan tak terbaca screen reader. */
   visible: boolean;
@@ -93,25 +118,19 @@ interface FlowStationProps {
 
 /**
  * Satu stasiun diorama: cincin ping (bila aktif), pedestal, objek, label,
- * dan pill keterangan — semua dari bentuk precomputed di constants.
- * Reveal progresif: stasiun jatuh dari atas dengan overshoot (emulasi spring
- * acuan: mulai -64px, melewati posisi akhir sedikit, lalu settle). Pola dua
- * fase rAF (seperti FlowPacket) agar drop ikut berjalan saat load pertama,
- * bukan hanya saat reveal antar langkah; terputus saat reduced motion.
+ * dan pill keterangan. Reveal progresif: stasiun jatuh dari atas dengan
+ * overshoot (emulasi spring acuan: mulai -64px, melewati posisi akhir sedikit,
+ * lalu settle). Pola dua fase rAF (seperti packet) agar drop ikut berjalan saat
+ * load pertama, bukan hanya saat reveal antar langkah; terputus saat reduced motion.
  */
-export default function FlowStation({
-  id,
+export function DioramaStation({
+  spec,
   state,
   visible,
   reducedMotion,
-}: Readonly<FlowStationProps>): React.JSX.Element {
-  const node = diagramNode(id);
-  const station = STATION_SHAPES[id];
+}: Readonly<DioramaStationProps>): React.JSX.Element {
   const style = NODE_STYLE[state];
-  const ping = STATION_PING[id];
-  const center = STATION_SCREEN[id];
-  const pill = DIAGRAM.labelPill;
-  const pillY = center.y + DIAGRAM.labelGap + 14;
+  const pillY = spec.screen.y + spec.labelGap + 14;
 
   const [dropped, setDropped] = useState(false);
 
@@ -132,7 +151,7 @@ export default function FlowStation({
 
   return (
     <g
-      data-node-id={id}
+      data-node-id={spec.id}
       aria-hidden={!visible}
       style={{
         opacity: shown ? 1 : 0,
@@ -144,57 +163,57 @@ export default function FlowStation({
     >
       {state === 'active' ? (
         <ellipse
-          cx={ping.x}
-          cy={ping.y}
-          rx={ping.rx}
-          ry={ping.ry}
+          cx={spec.ping.x}
+          cy={spec.ping.y}
+          rx={spec.ping.rx}
+          ry={spec.ping.ry}
           fill="none"
           strokeWidth={1.5}
           className={cx('animate-node-ping', style.stroke)}
           style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
         />
       ) : null}
-      {station.platform.map((shape, index) => (
-        <Shape
+      {spec.shapes.platform.map((shape, index) => (
+        <DioramaShape
           key={`platform-${index}`}
           shape={shape}
           strokeClass={style.stroke}
         />
       ))}
-      {station.object.map((shape, index) => (
-        <Shape
+      {spec.shapes.object.map((shape, index) => (
+        <DioramaShape
           key={`object-${index}`}
           shape={shape}
           strokeClass={style.stroke}
         />
       ))}
       <text
-        x={center.x}
-        y={center.y + DIAGRAM.labelGap}
+        x={spec.screen.x}
+        y={spec.screen.y + spec.labelGap}
         textAnchor="middle"
         fontSize={13}
         fontWeight={600}
         className={style.label}
       >
-        {node.label}
+        {spec.label}
       </text>
       <rect
-        x={center.x - pill.w / 2}
+        x={spec.screen.x - spec.pill.w / 2}
         y={pillY}
-        width={pill.w}
-        height={pill.h}
-        rx={pill.h / 2}
+        width={spec.pill.w}
+        height={spec.pill.h}
+        rx={spec.pill.h / 2}
         strokeWidth={1}
         className="fill-background-tertiary stroke-stroke-primary"
       />
       <text
-        x={center.x}
-        y={pillY + pill.h / 2 + 3.5}
+        x={spec.screen.x}
+        y={pillY + spec.pill.h / 2 + 3.5}
         textAnchor="middle"
         fontSize={10}
         className={style.sub}
       >
-        {node.sub}
+        {spec.sub}
       </text>
     </g>
   );

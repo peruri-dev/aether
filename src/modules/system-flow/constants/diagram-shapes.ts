@@ -1,98 +1,40 @@
-import { DIAGRAM, diagramNode, STATION_SCREEN } from './diagram';
-import { userCrowdShapes } from './diagram-figures';
-import { cuboid, cylinder, frontStrip, iso, isoEllipse, isoPoly } from './iso';
-
+import {
+  buildBox,
+  buildFaceDot,
+  buildGridLines,
+  buildPing,
+  buildPlatform,
+  buildSlab,
+  buildStrip,
+} from '@/modules/common/lesson/diorama/builders';
+import { fitCamera } from '@/modules/common/lesson/diorama/camera';
 import type {
-  IsoEllipse,
+  Bounds,
+  CameraView,
+} from '@/modules/common/lesson/diorama/camera';
+import { cylinder, isoEllipse } from '@/modules/common/lesson/diorama/iso';
+import type {
   IsoFillKey,
   IsoShape,
-  LineSeg,
   StationShapes,
   XY,
-} from './iso';
+} from '@/modules/common/lesson/diorama/iso';
+import { ISO_FILL as SCENE_FILL } from '@/modules/common/lesson/diorama/palette';
+
+import { DIAGRAM, diagramNode, STATION_SCREEN } from './diagram';
+import { userCrowdShapes } from './diagram-figures';
+
 import type { NodeId } from '../types/flow';
 
-/**
- * Palet warna scene via CSS variable token (pola yang sama dengan
- * var(--color-chart-*): satu-satunya cara memakai nilai token mentah untuk SVG).
- * Warna netral sengaja konstan di kedua tema agar diorama terlihat terang di
- * atas pelat yang ikut berubah tema.
- */
-export const ISO_FILL = {
-  slabTop: 'var(--color-background-primary)',
-  slabSide: 'var(--color-background-tertiary)',
-  gridLine: 'var(--color-stroke-tertiary)',
-  platformTop: 'var(--color-background-tertiary)',
-  platformSide: 'var(--color-neutral-200)',
-  platformSide2: 'var(--color-neutral-300)',
-  faceTop: 'var(--color-neutral-100)',
-  faceRight: 'var(--color-neutral-200)',
-  faceLeft: 'var(--color-neutral-300)',
-  detail: 'var(--color-neutral-50)',
-  screenTile: 'var(--color-guide-200)',
-  led: 'var(--color-positive-600)',
-  ledWarm: 'var(--color-warning-600)',
-  figureShadow: 'var(--color-neutral-900)',
-  figureCloth1: 'var(--color-chart-categorical-01)',
-  figureCloth2: 'var(--color-chart-categorical-04)',
-  figureCloth3: 'var(--color-chart-categorical-07)',
-  figureCloth4: 'var(--color-chart-categorical-09)',
-  figureCloth5: 'var(--color-chart-categorical-02)',
-} as const satisfies Record<IsoFillKey, string>;
+// Palet scene bersama di common/lesson; re-export agar kontrak modul tetap.
+export const ISO_FILL = SCENE_FILL;
+export type { IsoFillKey };
 
 const O: XY = DIAGRAM.offset;
-
-/** Polygon berisi kotak isometrik: sisi dulu, atap terakhir (painter's algorithm). */
-function box(
-  x: number,
-  y: number,
-  w: number,
-  d: number,
-  h: number,
-  z0: number,
-): IsoShape[] {
-  const faces = cuboid(x, y, w, d, h, z0, O);
-  return [
-    { kind: 'polygon', points: faces.right, fill: 'faceRight', stroke: true },
-    { kind: 'polygon', points: faces.left, fill: 'faceLeft', stroke: true },
-    { kind: 'polygon', points: faces.top, fill: 'faceTop', stroke: true },
-  ];
-}
-
-function strip(
-  x: number,
-  y: number,
-  w: number,
-  z1: number,
-  z2: number,
-  inset: number,
-  fill: IsoFillKey,
-): IsoShape {
-  return {
-    kind: 'polygon',
-    points: frontStrip(x, y, w, z1, z2, inset, O),
-    fill,
-    stroke: false,
-  };
-}
-
-/** Dot di bidang muka depan (+gy): mis. lampu indikator rack dan dot URL browser. */
-function faceDot(
-  x: number,
-  y: number,
-  z: number,
-  r: number,
-  fill: IsoFillKey,
-): IsoShape {
-  const p = iso(x, y, z, O);
-  return { kind: 'circle', cx: p.x, cy: p.y, r, fill, stroke: false };
-}
 
 /** Objek di atas pedestal per stasiun, dalam koordinat ground lokal pedestal. */
 function buildObject(nodeId: NodeId): IsoShape[] {
   const node = diagramNode(nodeId);
-  const ox = node.gx - node.pw / 2;
-  const oy = node.gy - DIAGRAM.platform.d / 2;
 
   if (nodeId === 'user') {
     // Kerumunan pengunjung kecil menggantikan satu laptop — mengikuti gaya
@@ -100,17 +42,20 @@ function buildObject(nodeId: NodeId): IsoShape[] {
     return userCrowdShapes(node);
   }
 
+  const ox = node.gx - node.pw / 2;
+  const oy = node.gy - DIAGRAM.platform.d / 2;
+
   if (nodeId === 'app') {
     const px = ox + 5;
     const faceY = oy + 30;
     return [
-      ...box(px, oy + 20, 80, 10, 64, 16),
-      strip(px, faceY, 80, 72, 79, 3, 'screenTile'),
-      strip(px + 46, faceY, 30, 30, 62, 3, 'detail'),
-      strip(px, faceY, 36, 54, 58, 3, 'detail'),
-      strip(px, faceY, 36, 46, 50, 3, 'detail'),
-      strip(px, faceY, 36, 38, 42, 3, 'detail'),
-      faceDot(px + 10, faceY, 75.5, 2.5, 'detail'),
+      ...buildBox(O, px, oy + 20, 80, 10, 64, 16),
+      buildStrip(O, px, faceY, 80, 72, 79, 3, 'screenTile'),
+      buildStrip(O, px + 46, faceY, 30, 30, 62, 3, 'detail'),
+      buildStrip(O, px, faceY, 36, 54, 58, 3, 'detail'),
+      buildStrip(O, px, faceY, 36, 46, 50, 3, 'detail'),
+      buildStrip(O, px, faceY, 36, 38, 42, 3, 'detail'),
+      buildFaceDot(O, px + 10, faceY, 75.5, 2.5, 'detail'),
     ];
   }
 
@@ -118,18 +63,22 @@ function buildObject(nodeId: NodeId): IsoShape[] {
     const rx = ox + 8;
     const faceY = oy + 47;
     return [
-      ...box(rx, oy + 3, 64, 44, 78, 16),
-      strip(rx, faceY, 64, 26, 30, 4, 'detail'),
-      strip(rx, faceY, 64, 40, 44, 4, 'detail'),
-      strip(rx, faceY, 64, 54, 58, 4, 'detail'),
-      strip(rx, faceY, 64, 68, 72, 4, 'detail'),
-      faceDot(rx + 10, faceY, 86, 2.5, 'led'),
-      faceDot(rx + 19, faceY, 86, 2.5, 'ledWarm'),
+      ...buildBox(O, rx, oy + 3, 64, 44, 78, 16),
+      buildStrip(O, rx, faceY, 64, 26, 30, 4, 'detail'),
+      buildStrip(O, rx, faceY, 64, 40, 44, 4, 'detail'),
+      buildStrip(O, rx, faceY, 64, 54, 58, 4, 'detail'),
+      buildStrip(O, rx, faceY, 64, 68, 72, 4, 'detail'),
+      buildFaceDot(O, rx + 10, faceY, 86, 2.5, 'led'),
+      buildFaceDot(O, rx + 19, faceY, 86, 2.5, 'ledWarm'),
     ];
   }
 
   // database: tumpukan dua silinder + tutup
-  const cx = ox + node.pw / 2;
+  return buildDatabase(ox, oy);
+}
+
+function buildDatabase(ox: number, oy: number): IsoShape[] {
+  const cx = ox + diagramNode('database').pw / 2;
   const cy = oy + DIAGRAM.platform.d / 2;
   const lower = cylinder(cx, cy, 24, 20, 16, O);
   const upper = cylinder(cx, cy, 24, 20, 36, O);
@@ -170,95 +119,37 @@ function buildObject(nodeId: NodeId): IsoShape[] {
 /** Bentuk semua stasiun, dihitung sekali saat modul dimuat. */
 export const STATION_SHAPES: Record<NodeId, StationShapes> = Object.fromEntries(
   DIAGRAM.stations.map((node) => {
-    const faces = cuboid(
-      node.gx - node.pw / 2,
-      node.gy - DIAGRAM.platform.d / 2,
+    const platform = buildPlatform(
+      O,
+      node.gx,
+      node.gy,
       node.pw,
       DIAGRAM.platform.d,
       DIAGRAM.platform.h,
-      0,
-      O,
     );
-    const platform: IsoShape[] = [
-      {
-        kind: 'polygon',
-        points: faces.right,
-        fill: 'platformSide',
-        stroke: true,
-      },
-      {
-        kind: 'polygon',
-        points: faces.left,
-        fill: 'platformSide2',
-        stroke: true,
-      },
-      { kind: 'polygon', points: faces.top, fill: 'platformTop', stroke: true },
-    ];
     return [node.id, { platform, object: buildObject(node.id) }];
   }),
 ) as Record<NodeId, StationShapes>;
 
 /** Cincin ping isometrik di atas pedestal stasiun aktif. */
-export const STATION_PING: Record<NodeId, IsoEllipse> = Object.fromEntries(
+export const STATION_PING: Record<
+  NodeId,
+  ReturnType<typeof buildPing>
+> = Object.fromEntries(
   DIAGRAM.stations.map((node) => [
     node.id,
-    isoEllipse(node.gx, node.gy, 42, DIAGRAM.platform.h, O),
+    buildPing(O, node.gx, node.gy, 42, DIAGRAM.platform.h),
   ]),
-) as Record<NodeId, IsoEllipse>;
+) as Record<NodeId, ReturnType<typeof buildPing>>;
 
-/** Pelat dasar scene: sisi extruded + bidang atas. */
 const slab = DIAGRAM.slab;
-const slabFaces = cuboid(
-  slab.x0,
-  slab.y0,
-  slab.x1 - slab.x0,
-  slab.y1 - slab.y0,
-  slab.thickness,
-  -slab.thickness,
-  O,
-);
+const built = buildSlab(O, slab);
 
-const slabTopPoints = isoPoly(
-  [
-    [slab.x0, slab.y0, 0],
-    [slab.x1, slab.y0, 0],
-    [slab.x1, slab.y1, 0],
-    [slab.x0, slab.y1, 0],
-  ],
-  O,
-);
-
-export const SLAB_SHAPES: IsoShape[] = [
-  { kind: 'polygon', points: slabFaces.right, fill: 'slabSide', stroke: true },
-  { kind: 'polygon', points: slabFaces.left, fill: 'slabSide', stroke: true },
-  {
-    kind: 'polygon',
-    points: slabTopPoints,
-    fill: 'slabTop',
-    stroke: true,
-  },
-];
-
-export const SLAB_TOP_POINTS = slabTopPoints;
+export const SLAB_SHAPES: IsoShape[] = built.shapes;
+export const SLAB_TOP_POINTS = built.topPoints;
 
 /** Garis grid isometrik di atas pelat, ter-clip oleh polygon pelat. */
-export const GRID_LINES: LineSeg[] = (() => {
-  const lines: LineSeg[] = [];
-  const step = DIAGRAM.gridStep;
-  const firstY = Math.ceil(slab.y0 / step) * step;
-  for (let gy = firstY; gy <= slab.y1; gy += step) {
-    const a = iso(slab.x0, gy, 0, O);
-    const b = iso(slab.x1, gy, 0, O);
-    lines.push({ x1: a.x, y1: a.y, x2: b.x, y2: b.y });
-  }
-  const firstX = Math.ceil(slab.x0 / step) * step;
-  for (let gx = firstX; gx <= slab.x1; gx += step) {
-    const a = iso(gx, slab.y0, 0, O);
-    const b = iso(gx, slab.y1, 0, O);
-    lines.push({ x1: a.x, y1: a.y, x2: b.x, y2: b.y });
-  }
-  return lines;
-})();
+export const GRID_LINES = buildGridLines(O, slab, DIAGRAM.gridStep);
 
 /**
  * Kamera adaptif: tiap langkah membingkai hanya stasiun yang sudah muncul —
@@ -273,24 +164,8 @@ const STATION_TOP_ABOVE: Record<NodeId, number> = {
   database: 56, // tutup silinder z 58 + tinggi ellipse-nya
 };
 
-const CAMERA_PAD = 28;
-const CAMERA_MIN_SCALE = 1;
-const CAMERA_MAX_SCALE = 1.6;
-
-/** Viewport kamera dalam koordinat scene: scale + translate ke tengah viewBox. */
-export interface CameraView {
-  scale: number;
-  tx: number;
-  ty: number;
-}
-
 /** Bounds satu stasiun di layar: pedestal + objek di atasnya + label + pill. */
-function stationBounds(id: NodeId): {
-  minX: number;
-  minY: number;
-  maxX: number;
-  maxY: number;
-} {
+function stationBounds(id: NodeId): Bounds {
   const node = diagramNode(id);
   const c = STATION_SCREEN[id];
   const halfW = (node.pw + DIAGRAM.platform.d) / 2 + 8;
@@ -307,33 +182,12 @@ function stationBounds(id: NodeId): {
  * disertakan agar bingkai hanya melebar (zoom-out monoton), tidak bolak-balik.
  */
 export function cameraView(revealed: ReadonlySet<NodeId>): CameraView {
-  const ids = new Set<NodeId>(revealed);
-  ids.add('user');
-
-  let minX = Number.POSITIVE_INFINITY;
-  let minY = Number.POSITIVE_INFINITY;
-  let maxX = Number.NEGATIVE_INFINITY;
-  let maxY = Number.NEGATIVE_INFINITY;
-  for (const id of ids) {
-    const b = stationBounds(id);
-    minX = Math.min(minX, b.minX - CAMERA_PAD);
-    minY = Math.min(minY, b.minY - CAMERA_PAD);
-    maxX = Math.max(maxX, b.maxX + CAMERA_PAD);
-    maxY = Math.max(maxY, b.maxY + CAMERA_PAD);
-  }
-
-  const boxW = maxX - minX;
-  const boxH = maxY - minY;
-  const scale = Math.min(
-    CAMERA_MAX_SCALE,
-    Math.max(
-      CAMERA_MIN_SCALE,
-      Math.min(DIAGRAM.width / boxW, DIAGRAM.height / boxH),
-    ),
-  );
-  return {
-    scale,
-    tx: DIAGRAM.width / 2 - scale * ((minX + maxX) / 2),
-    ty: DIAGRAM.height / 2 - scale * ((minY + maxY) / 2),
-  };
+  const bounds = DIAGRAM.stations
+    .map((node) => node.id)
+    .filter((id) => revealed.has(id) || id === 'user')
+    .map((id) => stationBounds(id));
+  return fitCamera(bounds, {
+    width: DIAGRAM.width,
+    height: DIAGRAM.height,
+  });
 }

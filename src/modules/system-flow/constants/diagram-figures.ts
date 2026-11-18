@@ -1,8 +1,9 @@
+import { iso } from '@/modules/common/lesson/diorama/iso';
+import type { IsoFillKey, IsoShape } from '@/modules/common/lesson/diorama/iso';
+
 import { DIAGRAM } from './diagram';
-import { iso } from './iso';
 
 import type { DiagramNode } from './diagram';
-import type { IsoFillKey, IsoShape } from './iso';
 
 /**
  * Kerumunan figur orang kecil untuk stasiun pengguna — mengikuti gaya lesson

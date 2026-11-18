@@ -4,6 +4,7 @@
  * kiri-bawah layar, +y kanan-bawah, +z ke atas. Dengan ini muka depan objek
  * (bidang +gy) menghadap kanan-bawah penonton. Semua fungsi murni agar bisa
  * dites dan dihitung sekali sebagai konstanta, bukan saat render.
+ * Dipakai bersama oleh semua lesson (system-flow, dashbent-login, dst.).
  */
 
 export interface XY {
@@ -152,7 +153,7 @@ export function cylinder(
 
 /**
  * Kunci palet warna scene. Union didefinisikan di sini agar bentuk tidak
- * bergantung modul palet; ISO_FILL di diagram-shapes diverifikasi dengan
+ * bergantung modul palet; ISO_FILL di palette diverifikasi dengan
  * `satisfies Record<IsoFillKey, string>`.
  */
 export type IsoFillKey =
@@ -169,6 +170,7 @@ export type IsoFillKey =
   | 'screenTile'
   | 'led'
   | 'ledWarm'
+  | 'ink'
   | 'figureShadow'
   | 'figureCloth1'
   | 'figureCloth2'
@@ -177,7 +179,7 @@ export type IsoFillKey =
   | 'figureCloth5';
 
 /**
- * Bentuk precomputed untuk dirender generik oleh flow-node.
+ * Bentuk precomputed untuk dirender generik oleh DioramaStation.
  * `fill` adalah key ISO_FILL; `stroke` berarti digaris dengan warna stroke objek.
  */
 export type IsoShape =

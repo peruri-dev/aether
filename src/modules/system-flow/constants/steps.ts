@@ -1,3 +1,5 @@
+import { parseStepParam as parseStepNumber } from '@/modules/common/lesson/utils';
+
 import type { FlowStep } from '../types/flow';
 
 /**
@@ -223,12 +225,10 @@ export function getStep(index: number): FlowStep {
 /**
  * Parse param path langkah (mis. "3" dari /system-flow/3) menjadi nomor
  * langkah. null berarti tidak valid — halaman .astro menjawab 404.
+ * Aturan parsing bersama ada di common/lesson.
  */
 export function parseStepParam(raw: string | undefined): number | null {
-  if (raw === undefined || !/^\d+$/.test(raw)) return null;
-  const value = Number.parseInt(raw, 10);
-  if (value < 1 || value > STEPS.length) return null;
-  return value;
+  return parseStepNumber(raw, STEPS.length);
 }
 
 /** Jeda autoplay satu langkah: rantai hop terlama + waktu baca. */

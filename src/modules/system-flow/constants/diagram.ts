@@ -1,7 +1,7 @@
-import { iso } from './iso';
+import { iso } from '@/modules/common/lesson/diorama/iso';
+import type { XY } from '@/modules/common/lesson/diorama/iso';
 
-import type { XY } from './iso';
-import type { NodeId, NodeState, PacketKind } from '../types/flow';
+import type { NodeId, PacketKind } from '../types/flow';
 
 /** Edge penghubung dua stasiun bertetangga di ground. */
 export interface DiagramEdge {
@@ -144,24 +144,5 @@ export const PACKET_LEGEND: Record<PacketKind, { dot: string; label: string }> =
     handshake: { dot: 'bg-guide-500', label: 'handshake' },
   };
 
-/** Class garis dan teks node per state. */
-export const NODE_STYLE: Record<
-  NodeState,
-  { stroke: string; label: string; sub: string }
-> = {
-  idle: {
-    stroke: 'stroke-stroke-tertiary',
-    label: 'fill-content-secondary',
-    sub: 'fill-content-tertiary',
-  },
-  active: {
-    stroke: 'stroke-guide-500',
-    label: 'fill-content-primary',
-    sub: 'fill-content-secondary',
-  },
-  done: {
-    stroke: 'stroke-stroke-secondary',
-    label: 'fill-content-primary',
-    sub: 'fill-content-secondary',
-  },
-};
+/** Class garis dan teks node per state — kini di common/lesson (NODE_STYLE). */
+export { NODE_STYLE } from '@/modules/common/lesson/diorama/station';
