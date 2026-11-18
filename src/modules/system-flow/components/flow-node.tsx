@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import { cx } from '@/modules/common/styles/cx';
 
 import {
@@ -92,7 +94,10 @@ interface FlowStationProps {
 /**
  * Satu stasiun diorama: cincin ping (bila aktif), pedestal, objek, label,
  * dan pill keterangan — semua dari bentuk precomputed di constants.
- * Reveal progresif: fade + naik dari "tanah", terputus saat reduced motion.
+ * Reveal progresif: stasiun jatuh dari atas dengan overshoot (emulasi spring
+ * acuan: mulai -64px, melewati posisi akhir sedikit, lalu settle). Pola dua
+ * fase rAF (seperti FlowPacket) agar drop ikut berjalan saat load pertama,
+ * bukan hanya saat reveal antar langkah; terputus saat reduced motion.
  */
 export default function FlowStation({
   id,
@@ -108,16 +113,33 @@ export default function FlowStation({
   const pill = DIAGRAM.labelPill;
   const pillY = center.y + DIAGRAM.labelGap + 14;
 
+  const [dropped, setDropped] = useState(false);
+
+  useEffect(() => {
+    if (!visible) {
+      setDropped(false);
+      return;
+    }
+    if (reducedMotion) {
+      setDropped(true);
+      return;
+    }
+    const frame = requestAnimationFrame(() => setDropped(true));
+    return () => cancelAnimationFrame(frame);
+  }, [visible, reducedMotion]);
+
+  const shown = visible && dropped;
+
   return (
     <g
       data-node-id={id}
       aria-hidden={!visible}
       style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? 'none' : 'translateY(12px)',
+        opacity: shown ? 1 : 0,
+        transform: shown ? 'none' : 'translateY(-64px)',
         transition: reducedMotion
           ? 'none'
-          : 'opacity 450ms ease, transform 450ms cubic-bezier(0.16, 1, 0.3, 1)',
+          : 'opacity 450ms ease, transform 620ms cubic-bezier(0.34, 1.56, 0.64, 1)',
       }}
     >
       {state === 'active' ? (
