@@ -43,6 +43,10 @@ const DESC =
   'dan password (kuning keemasan), kode TOTP (biru), kode cadangan ' +
   '(hijau), dan sesi (abu gelap).';
 
+/** Stasiun dengan caption di atas objek: rack API adalah satu-satunya stasiun
+ * baris belakang, dan zona bawahnya dipakai stasiun baris depan. */
+const LABEL_ABOVE_IDS = new Set<NodeId>(['api']);
+
 /** Spesifikasi stasiun scene dari konstanta modul, terurut kedalaman. */
 function stationSpecs(): StationSpec[] {
   return ORDERED_STATIONS.map((node) => ({
@@ -52,7 +56,10 @@ function stationSpecs(): StationSpec[] {
     screen: STATION_SCREEN[node.id],
     ping: STATION_PING[node.id],
     shapes: STATION_SHAPES[node.id],
-    labelGap: DIAGRAM.labelGap,
+    labelGap: LABEL_ABOVE_IDS.has(node.id)
+      ? DIAGRAM.labelGapAbove
+      : DIAGRAM.labelGap,
+    labelAbove: LABEL_ABOVE_IDS.has(node.id),
     pill: DIAGRAM.labelPill,
   }));
 }

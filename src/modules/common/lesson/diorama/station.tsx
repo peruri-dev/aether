@@ -106,6 +106,8 @@ export interface StationSpec {
   shapes: StationShapes;
   labelGap: number;
   pill: { w: number; h: number };
+  /** Label dan pill di atas objek, bukan di bawah pedestal (stasiun baris belakang). */
+  labelAbove?: boolean;
 }
 
 interface DioramaStationProps {
@@ -117,21 +119,12 @@ interface DioramaStationProps {
 }
 
 /**
- * Satu stasiun diorama: cincin ping (bila aktif), pedestal, objek, label,
- * dan pill keterangan. Reveal progresif: stasiun jatuh dari atas dengan
- * overshoot (emulasi spring acuan: mulai -64px, melewati posisi akhir sedikit,
- * lalu settle). Pola dua fase rAF (seperti packet) agar drop ikut berjalan saat
- * load pertama, bukan hanya saat reveal antar langkah; terputus saat reduced motion.
+ * Reveal progresif: stasiun jatuh dari atas dengan overshoot (emulasi spring
+ * acuan: mulai -64px, melewati posisi akhir sedikit, lalu settle). Pola dua
+ * fase rAF (seperti packet) agar drop ikut berjalan saat load pertama, bukan
+ * hanya saat reveal antar langkah; terputus saat reduced motion.
  */
-export function DioramaStation({
-  spec,
-  state,
-  visible,
-  reducedMotion,
-}: Readonly<DioramaStationProps>): React.JSX.Element {
-  const style = NODE_STYLE[state];
-  const pillY = spec.screen.y + spec.labelGap + 14;
-
+function useDropReveal(visible: boolean, reducedMotion: boolean): boolean {
   const [dropped, setDropped] = useState(false);
 
   useEffect(() => {
@@ -147,19 +140,43 @@ export function DioramaStation({
     return () => cancelAnimationFrame(frame);
   }, [visible, reducedMotion]);
 
-  const shown = visible && dropped;
+  return visible && dropped;
+}
+
+/** Gaya grup reveal yang sama untuk tubuh stasiun dan caption-nya. */
+function dropStyle(
+  shown: boolean,
+  reducedMotion: boolean,
+): React.CSSProperties {
+  return {
+    opacity: shown ? 1 : 0,
+    transform: shown ? 'none' : 'translateY(-64px)',
+    transition: reducedMotion
+      ? 'none'
+      : 'opacity 450ms ease, transform 620ms cubic-bezier(0.34, 1.56, 0.64, 1)',
+  };
+}
+
+/**
+ * Tubuh satu stasiun diorama: cincin ping (bila aktif), pedestal, dan objek.
+ * Label serta pill digambar terpisah oleh DioramaStationCaption di lapisan
+ * atas scene, supaya teks tidak pernah tertutup pedestal atau objek stasiun
+ * lain (painter's algorithm antar baris).
+ */
+export function DioramaStation({
+  spec,
+  state,
+  visible,
+  reducedMotion,
+}: Readonly<DioramaStationProps>): React.JSX.Element {
+  const style = NODE_STYLE[state];
+  const shown = useDropReveal(visible, reducedMotion);
 
   return (
     <g
       data-node-id={spec.id}
       aria-hidden={!visible}
-      style={{
-        opacity: shown ? 1 : 0,
-        transform: shown ? 'none' : 'translateY(-64px)',
-        transition: reducedMotion
-          ? 'none'
-          : 'opacity 450ms ease, transform 620ms cubic-bezier(0.34, 1.56, 0.64, 1)',
-      }}
+      style={dropStyle(shown, reducedMotion)}
     >
       {state === 'active' ? (
         <ellipse
@@ -187,9 +204,40 @@ export function DioramaStation({
           strokeClass={style.stroke}
         />
       ))}
+    </g>
+  );
+}
+
+interface DioramaStationCaptionProps {
+  spec: StationSpec;
+  state: NodeState;
+  visible: boolean;
+  reducedMotion: boolean;
+}
+
+/**
+ * Caption satu stasiun: label dan pill keterangan. Default di bawah pedestal;
+ * `labelAbove` membalik ke atas objek untuk stasiun baris belakang yang zona
+ * bawahnya dipakai stasiun baris depan. Animasi reveal sama dengan tubuhnya.
+ */
+export function DioramaStationCaption({
+  spec,
+  state,
+  visible,
+  reducedMotion,
+}: Readonly<DioramaStationCaptionProps>): React.JSX.Element {
+  const style = NODE_STYLE[state];
+  const shown = useDropReveal(visible, reducedMotion);
+  const labelY = spec.labelAbove
+    ? spec.screen.y - spec.labelGap
+    : spec.screen.y + spec.labelGap;
+  const pillY = spec.labelAbove ? labelY - 14 - spec.pill.h : labelY + 14;
+
+  return (
+    <g aria-hidden={!visible} style={dropStyle(shown, reducedMotion)}>
       <text
         x={spec.screen.x}
-        y={spec.screen.y + spec.labelGap}
+        y={labelY}
         textAnchor="middle"
         fontSize={13}
         fontWeight={600}

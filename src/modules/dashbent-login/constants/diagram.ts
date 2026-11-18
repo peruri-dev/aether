@@ -37,8 +37,15 @@ export const DIAGRAM = {
   /** Jarak antar garis grid di pelat. */
   gridStep: 40,
   platform: { d: 50, h: 16 },
-  /** Jarak label/pill di bawah pusat stasiun. */
-  labelGap: 50,
+  /** Jarak label/pill di bawah pusat stasiun. Ujung bawah pedestal mencapai
+   * +47,5 dari pusat; 60 memberi jarak bersih sebelum puncak teks label. */
+  labelGap: 60,
+  /**
+   * Jarak label/pill di atas pusat stasiun untuk stasiun label-atas (rack API).
+   * Harus melewati sudut belakang atap rack (~78 dari pusat) agar caption
+   * tidak menempel atap; pill lalu menggantung di atas label.
+   */
+  labelGapAbove: 110,
   labelPill: { w: 140, h: 24 },
   /** Trim ujung jalur packet agar tidak menabrak pedestal. */
   edgeTrim: 28,

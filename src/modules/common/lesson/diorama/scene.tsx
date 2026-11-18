@@ -2,7 +2,7 @@ import { useEffect, useId, useState } from 'react';
 
 import { cx } from '@/modules/common/styles/cx';
 
-import { DioramaShape, DioramaStation } from './station';
+import { DioramaShape, DioramaStation, DioramaStationCaption } from './station';
 
 import type { CameraView } from './camera';
 import type { IsoShape, LineSeg, XY } from './iso';
@@ -213,6 +213,19 @@ export function DioramaScene({
         {stations.map((spec) => (
           <DioramaStation
             key={spec.id}
+            spec={spec}
+            state={nodeStates[spec.id] ?? 'idle'}
+            visible={revealedNodes.has(spec.id)}
+            reducedMotion={reducedMotion}
+          />
+        ))}
+
+        {/* Caption (label + pill) di lapisan tersendiri di atas semua tubuh
+            stasiun, agar teks tidak pernah tertutup pedestal/objek stasiun
+            lain. Urutan animasi reveal tetap sinkron dengan tubuhnya. */}
+        {stations.map((spec) => (
+          <DioramaStationCaption
+            key={`caption-${spec.id}`}
             spec={spec}
             state={nodeStates[spec.id] ?? 'idle'}
             visible={revealedNodes.has(spec.id)}

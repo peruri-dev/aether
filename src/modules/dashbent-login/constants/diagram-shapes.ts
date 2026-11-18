@@ -223,16 +223,27 @@ export const SLAB_TOP_POINTS = built.topPoints;
 /** Garis grid isometrik di atas pelat, ter-clip oleh polygon pelat. */
 export const GRID_LINES = buildGridLines(O, DIAGRAM.slab, DIAGRAM.gridStep);
 
-/** Bounds satu stasiun di layar: pedestal + objek di atasnya + label + pill. */
+/** Bounds satu stasiun di layar: pedestal + objek + caption (label + pill).
+ * Stasiun caption-atas (rack API) dibingkai dari pill di atasnya sampai
+ * kaki pedestal; stasiun biasa dari puncak objek sampai pill di bawah. */
 function stationBounds(id: NodeId): Bounds {
   const node = diagramNode(id);
   const c = STATION_SCREEN[id];
   const halfW = (node.pw + D) / 2 + 8;
+  const captionAbove = id === 'api';
   return {
     minX: c.x - halfW,
-    minY: c.y - STATION_TOP_ABOVE[id] - 10,
+    minY:
+      c.y -
+      (captionAbove
+        ? DIAGRAM.labelGapAbove + 14 + DIAGRAM.labelPill.h + 12
+        : STATION_TOP_ABOVE[id] + 10),
     maxX: c.x + halfW,
-    maxY: c.y + DIAGRAM.labelGap + 14 + DIAGRAM.labelPill.h + 12,
+    maxY:
+      c.y +
+      (captionAbove
+        ? DIAGRAM.platform.h + 32
+        : DIAGRAM.labelGap + 14 + DIAGRAM.labelPill.h + 12),
   };
 }
 
