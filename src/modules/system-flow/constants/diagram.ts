@@ -1,60 +1,106 @@
+import { iso } from './iso';
+
+import type { XY } from './iso';
 import type { NodeId, NodeState, PacketKind } from '../types/flow';
 
-/** Titik dua dimensi dalam koordinat viewBox SVG. */
-export interface XY {
-  x: number;
-  y: number;
-}
-
-/** Definisi satu node diagram. `x` adalah pusat kotak. */
-export interface DiagramNode {
-  id: NodeId;
-  x: number;
-  label: string;
-  sub: string;
-}
-
-/** Garis penghubung antar dua node bertetangga. */
+/** Edge penghubung dua stasiun bertetangga di ground. */
 export interface DiagramEdge {
   id: string;
   from: NodeId;
   to: NodeId;
 }
 
+/** Satu stasiun diorama: pusat pedestal di ground (gx, gy) + label. */
+export interface DiagramNode {
+  id: NodeId;
+  gx: number;
+  gy: number;
+  /** Lebar pedestal; kedalaman pedestal sama untuk semua. */
+  pw: number;
+  label: string;
+  sub: string;
+}
+
 /**
- * Geometri scene diagram (satuan viewBox, bukan piksel — SVG menskala responsif).
- * Empat node berjajar horizontal, edge menghubungkan tetangga terdekat saja.
- * `overflowPad` melebarkan viewBox: packet pill (lebar 56, setengahnya 28) bisa
- * melewati ujung edge paling luar saat tiba di node terdekat tepi kiri/kanan.
+ * Layout scene isometrik. Aliran mengalir menuruni tangga ringan dari kiri-atas
+ * (pengguna, paling jauh) ke kanan-bawah (database, paling dekat penonton),
+ * seperti diorama pada project acuan.
  */
 export const DIAGRAM = {
-  width: 860,
-  height: 280,
-  overflowPad: 30,
-  nodeWidth: 140,
-  nodeHeight: 84,
-  centerY: 160,
-  nodes: [
-    { id: 'user', x: 90, label: 'Pengguna', sub: 'shop.example' },
-    { id: 'app', x: 315, label: 'Website', sub: 'UI + skeleton' },
-    { id: 'server', x: 540, label: 'Server API', sub: 'GET /api/products' },
+  width: 900,
+  height: 600,
+  /** Titik ground (0,0) jatuh di layar. */
+  offset: { x: 230, y: 210 } as XY,
+  /** Pelat dasar scene di ground: dari (x0,y0) sampai (x1,y1), tebal ke bawah. */
+  slab: { x0: -35, y0: -110, x1: 525, y1: 135, thickness: 18 },
+  /** Jarak antar garis grid di pelat. */
+  gridStep: 40,
+  platform: { d: 70, h: 16 },
+  /** Jarak label/pill di bawah pusat stasiun. */
+  labelGap: 38,
+  labelPill: { w: 150, h: 24 },
+  /** Trim ujung jalur packet agar tidak menabrak pedestal. */
+  edgeTrim: 55,
+  stations: [
+    {
+      id: 'user',
+      gx: 0,
+      gy: 40,
+      pw: 100,
+      label: 'Pengguna',
+      sub: 'shop.example',
+    },
+    {
+      id: 'app',
+      gx: 140,
+      gy: 0,
+      pw: 100,
+      label: 'Website',
+      sub: 'UI + skeleton',
+    },
+    {
+      id: 'server',
+      gx: 280,
+      gy: -40,
+      pw: 90,
+      label: 'Server API',
+      sub: 'GET /api/products',
+    },
     {
       id: 'database',
-      x: 765,
+      gx: 420,
+      gy: -80,
+      pw: 90,
       label: 'Database',
       sub: 'SELECT … FROM products',
     },
-  ] as const satisfies readonly DiagramNode[],
+  ] as DiagramNode[],
   edges: [
     { id: 'user-app', from: 'user', to: 'app' },
     { id: 'app-server', from: 'app', to: 'server' },
     { id: 'server-db', from: 'server', to: 'database' },
-  ] as const satisfies readonly DiagramEdge[],
+  ] as DiagramEdge[],
 };
 
-const NODE_BY_ID = new Map<NodeId, (typeof DIAGRAM.nodes)[number]>(
-  DIAGRAM.nodes.map((node) => [node.id, node]),
+const PLATFORM_BY_ID = new Map<NodeId, DiagramNode>(
+  DIAGRAM.stations.map((node) => [node.id, node]),
 );
+
+export function diagramNode(id: NodeId): DiagramNode {
+  const node = PLATFORM_BY_ID.get(id);
+  if (!node) {
+    throw new Error(`Stasiun tidak dikenal: ${id}`);
+  }
+  return node;
+}
+
+/** Pusat atas pedestal stasiun, dalam koordinat layar. */
+export const STATION_SCREEN: Record<NodeId, XY> = Object.fromEntries(
+  DIAGRAM.stations.map((node) => {
+    const p = iso(node.gx, node.gy, DIAGRAM.platform.h);
+    return [node.id, { x: p.x + DIAGRAM.offset.x, y: p.y + DIAGRAM.offset.y }];
+  }),
+) as Record<NodeId, XY>;
 
 /**
  * Kunci kanonik pasangan node (arah bebas) untuk mencari edge:
@@ -64,17 +110,19 @@ export function edgePairKey(from: NodeId, to: NodeId): string {
   return [from, to].sort().join('-');
 }
 
-/** Ujung-ujung edge: garis horizontal di antara border dua node bertetangga. */
+/** Ujung jalur packet: segmen lurus antar pusat stasiun, dipangkas di kedua ujung. */
 export function edgeEnds(from: NodeId, to: NodeId): { start: XY; end: XY } {
-  const fromNode = NODE_BY_ID.get(from);
-  const toNode = NODE_BY_ID.get(to);
-  if (!fromNode || !toNode) {
-    throw new Error(`Edge tidak dikenal: ${from} -> ${to}`);
-  }
-  const pad = 10;
+  const a = STATION_SCREEN[from];
+  const b = STATION_SCREEN[to];
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const length = Math.hypot(dx, dy);
+  const trim = DIAGRAM.edgeTrim;
+  const ux = dx / length;
+  const uy = dy / length;
   return {
-    start: { x: fromNode.x + DIAGRAM.nodeWidth / 2 + pad, y: DIAGRAM.centerY },
-    end: { x: toNode.x - DIAGRAM.nodeWidth / 2 - pad, y: DIAGRAM.centerY },
+    start: { x: a.x + ux * trim, y: a.y + uy * trim },
+    end: { x: b.x - ux * trim, y: b.y - uy * trim },
   };
 }
 
@@ -96,24 +144,24 @@ export const PACKET_LEGEND: Record<PacketKind, { dot: string; label: string }> =
     handshake: { dot: 'bg-guide-500', label: 'handshake' },
   };
 
-/** Class visual kotak, glyph, dan label node per state. */
+/** Class garis dan teks node per state. */
 export const NODE_STYLE: Record<
   NodeState,
-  { box: string; glyph: string; label: string }
+  { stroke: string; label: string; sub: string }
 > = {
   idle: {
-    box: 'fill-background-secondary stroke-stroke-tertiary',
-    glyph: 'stroke-content-tertiary',
-    label: 'fill-content-tertiary',
+    stroke: 'stroke-stroke-tertiary',
+    label: 'fill-content-secondary',
+    sub: 'fill-content-tertiary',
   },
   active: {
-    box: 'fill-background-tertiary stroke-guide-500',
-    glyph: 'stroke-content-guide',
+    stroke: 'stroke-guide-500',
     label: 'fill-content-primary',
+    sub: 'fill-content-secondary',
   },
   done: {
-    box: 'fill-background-secondary stroke-stroke-secondary',
-    glyph: 'stroke-content-secondary',
+    stroke: 'stroke-stroke-secondary',
     label: 'fill-content-primary',
+    sub: 'fill-content-secondary',
   },
 };
