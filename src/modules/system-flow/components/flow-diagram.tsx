@@ -111,10 +111,10 @@ export default function FlowDiagram({
         Diagram alur request: pengguna, website, server, database
       </title>
       <desc id={descId}>
-        Diorama isometrik: empat stasiun berdiri di atas pelat dasar, dari
-        pengguna paling jauh hingga database paling dekat. Paket berwarna
-        bergerak antar stasiun: request (kuning keemasan), response (hijau), dan
-        handshake (biru).
+        Diorama isometrik: empat stasiun berdiri di atas pelat dasar, menanjak
+        dari pengguna paling dekat di kiri bawah hingga database paling jauh di
+        kanan atas. Paket berwarna bergerak antar stasiun: request (kuning
+        keemasan), response (hijau), dan handshake (biru).
       </desc>
 
       <defs>
