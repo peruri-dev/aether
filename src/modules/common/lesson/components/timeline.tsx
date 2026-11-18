@@ -30,6 +30,8 @@ export function LessonTimeline({
   const railInset = `${100 / (steps.length * 2)}%`;
   /** Pusat lingkaran dari atas chip: padding p-1 (4px) + setengah size-8 (16px). */
   const railTop = 19;
+  /** Isian progres: 0% di langkah pertama, 100% di langkah terakhir. */
+  const railFillPercent = (100 * activeIndex) / Math.max(steps.length - 1, 1);
 
   return (
     <section
@@ -49,12 +51,24 @@ export function LessonTimeline({
       </div>
       <ol className="relative flex w-full items-start">
         {/* Rail kontinu di belakang semua chip: menyentuh tepi setiap lingkaran
-            karena lingkaran (opaque, lapisan atas) menutupinya di tengah chip. */}
+            karena lingkaran (opaque, lapisan atas) menutupinya di tengah chip.
+            Isian di atasnya tumbuh dari node ke node saat langkah berganti,
+            pola sama dengan rail course acuan (transisi width 0.7s). */}
         <span
           aria-hidden="true"
           className="absolute h-0.5 rounded-full bg-stroke-primary"
           style={{ top: railTop, left: railInset, right: railInset }}
-        />
+        >
+          <span
+            aria-hidden="true"
+            className="absolute -inset-y-px rounded-full bg-guide-500 motion-reduce:transition-none"
+            data-testid={`${testIdPrefix}.timeline.rail.fill`}
+            style={{
+              width: `${railFillPercent}%`,
+              transition: 'width 700ms cubic-bezier(0.65, 0, 0.35, 1)',
+            }}
+          />
+        </span>
         {steps.map((step, index) => {
           const isActive = index === activeIndex;
 
