@@ -25,8 +25,11 @@ export function LessonTimeline({
   onSelect,
   testIdPrefix,
 }: Readonly<LessonTimelineProps>): React.JSX.Element {
-  const lastIndex = steps.length - 1;
   const active = steps[activeIndex];
+  /** Rail harus berhenti tepat di pusat lingkaran pertama dan terakhir. */
+  const railInset = `${100 / (steps.length * 2)}%`;
+  /** Pusat lingkaran dari atas chip: padding p-1 (4px) + setengah size-8 (16px). */
+  const railTop = 19;
 
   return (
     <section
@@ -44,63 +47,57 @@ export function LessonTimeline({
           Langkah {active?.number} dari {steps.length}
         </p>
       </div>
-      <ol className="flex w-full items-start">
+      <ol className="relative flex w-full items-start">
+        {/* Rail kontinu di belakang semua chip: menyentuh tepi setiap lingkaran
+            karena lingkaran (opaque, lapisan atas) menutupinya di tengah chip. */}
+        <span
+          aria-hidden="true"
+          className="absolute h-0.5 rounded-full bg-stroke-primary"
+          style={{ top: railTop, left: railInset, right: railInset }}
+        />
         {steps.map((step, index) => {
           const isActive = index === activeIndex;
 
           return (
-            <li key={step.id} className="flex min-w-0 flex-1 flex-col">
-              <div className="flex items-center">
+            <li
+              key={step.id}
+              className="relative z-10 flex min-w-0 flex-1 flex-col"
+            >
+              <button
+                type="button"
+                onClick={() => onSelect(index)}
+                aria-current={isActive ? 'step' : undefined}
+                aria-label={`Langkah ${step.number}: ${step.label}`}
+                data-testid={`${testIdPrefix}.timeline.step`}
+                data-step-id={step.id}
+                className={cx(
+                  'flex cursor-pointer flex-col items-center gap-1 rounded-8 p-1',
+                  focusRing,
+                )}
+              >
                 <span
-                  aria-hidden="true"
                   className={cx(
-                    'h-0.5 flex-1 rounded-full bg-stroke-primary',
-                    index === 0 && 'invisible',
-                  )}
-                />
-                <button
-                  type="button"
-                  onClick={() => onSelect(index)}
-                  aria-current={isActive ? 'step' : undefined}
-                  aria-label={`Langkah ${step.number}: ${step.label}`}
-                  data-testid={`${testIdPrefix}.timeline.step`}
-                  data-step-id={step.id}
-                  className={cx(
-                    'z-10 flex cursor-pointer flex-col items-center gap-1 rounded-8 p-1',
-                    focusRing,
+                    'grid size-8 place-items-center rounded-full border text-sm font-semibold tabular-nums transition-colors duration-300',
+                    isActive
+                      ? 'animate-hud-pop border-guide-500 bg-guide-500 text-content-on-brand'
+                      : 'border-stroke-primary bg-background-tertiary text-content-tertiary',
                   )}
                 >
-                  <span
-                    className={cx(
-                      'grid size-8 place-items-center rounded-full border text-sm font-semibold tabular-nums transition-colors duration-300',
-                      isActive
-                        ? 'border-guide-500 bg-guide-500 text-content-on-brand'
-                        : 'border-stroke-primary bg-background-tertiary text-content-tertiary',
-                    )}
-                  >
-                    {step.number}
-                  </span>
-                  {/* Slot label setinggi tetap: hanya langkah aktif yang berisi
-                      teks, supaya baris chip tidak melompat saat pindah langkah. */}
-                  <span
-                    className={cx(
-                      'max-w-24 truncate text-xs',
-                      isActive
-                        ? 'font-semibold text-content-primary'
-                        : 'invisible',
-                    )}
-                  >
-                    {step.label}
-                  </span>
-                </button>
-                <span
-                  aria-hidden="true"
-                  className={cx(
-                    'h-0.5 flex-1 rounded-full bg-stroke-primary',
-                    index === lastIndex && 'invisible',
+                  {step.number}
+                </span>
+                {/* Slot label setinggi tetap: hanya langkah aktif yang berisi
+                    teks (animasi masuk saat pindah langkah), supaya baris chip
+                    tidak melompat. */}
+                <span className="flex h-4 max-w-24 items-center justify-center text-xs">
+                  {isActive ? (
+                    <span className="animate-in truncate font-semibold text-content-primary duration-300 fade-in slide-in-from-bottom-1">
+                      {step.label}
+                    </span>
+                  ) : (
+                    <span className="invisible">{step.label}</span>
                   )}
-                />
-              </div>
+                </span>
+              </button>
             </li>
           );
         })}
