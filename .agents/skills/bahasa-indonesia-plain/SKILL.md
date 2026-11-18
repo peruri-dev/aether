@@ -88,11 +88,13 @@ Skill ini berlaku untuk UI copy, microcopy, laporan, panduan, dokumentasi, ringk
 ## Konvensi EYD dan penulisan standar
 
 ### Ejaan dan kapitalisasi
+
 - Gunakan huruf kapital hanya untuk nama diri, nama lembaga resmi, dan awal kalimat. Gunakan huruf kecil untuk semua judul dan subjudul (sentence case), kecuali nama diri.
 - Nama fitur atau produk: kapital jika itu nama resmi ("Daftar di TokoKitaSemua"), huruf kecil jika deskripsi umum ("daftar ke platform ini").
 - Jangan gunakan huruf kapital untuk penekanan, karena bisa terasa seperti berteriak dan tidak terbaca mesin pembaca layar (screen reader).
 
 ### Tanda baca
+
 - Gunakan tanda titik di akhir kalimat lengkap, termasuk di akhir butir daftar jika butirannya berupa kalimat utuh.
 - Gunakan tanda koma untuk memisahkan anak kalimat, bukan sebagai pengganti kalimat baru.
 - Hindari tanda seru kecuali untuk pesan keberhasilan atau ucapan selamat yang hangat dan konteksnya memang merayakan sesuatu. Jangan gunakan lebih dari satu tanda seru.
@@ -100,6 +102,7 @@ Skill ini berlaku untuk UI copy, microcopy, laporan, panduan, dokumentasi, ringk
 - Gunakan tanda petik ("...") untuk kutipan langsung dan judul dokumen atau skema, bukan huruf miring.
 
 ### Angka
+
 - Gunakan simbol % langsung setelah angka tanpa spasi: 50%, bukan 50 %.
 - Tulis Rp tanpa spasi sebelum angka: Rp75.000, bukan Rp 75.000.
 - Pisahkan ribuan dengan titik, desimal dengan koma (konvensi Indonesia): 1.500.000 — bukan 1,500,000.
@@ -107,6 +110,7 @@ Skill ini berlaku untuk UI copy, microcopy, laporan, panduan, dokumentasi, ringk
 - Untuk rentang angka gunakan kata "hingga" atau "sampai", bukan tanda hubung: "10 hingga 20 orang".
 
 ### Tanggal dan waktu
+
 - Tulis "4 Juni 2026" — tanpa koma, tanpa "ke-" atau "th".
 - Untuk rentang: "4 sampai 8 Juni 2026".
 - Tulis waktu sebagai "10.00" atau "10.00–11.30" (menggunakan titik, bukan titik dua).
@@ -248,6 +252,7 @@ Jika lulus keempatnya, teksnya sudah siap.
 ## Sebelum selesai: cek mandiri
 
 ### Konten dan struktur
+
 - Apakah hal terpenting sudah ada di awal?
 - Apakah seseorang yang baru pertama kali membaca bisa memahami setiap kalimat?
 - Apakah semua kalimat aktif, pendek, dan hanya memuat satu ide?
@@ -256,11 +261,13 @@ Jika lulus keempatnya, teksnya sudah siap.
 - Apakah ada kata yang bisa dipotong tanpa kehilangan makna? Kalau ya, potong.
 
 ### Inklusivitas dan keamanan
+
 - Apakah teks ini aman untuk seseorang yang sedang dalam kondisi rentan secara emosional?
 - Apakah angka dan langkah disajikan dengan cara yang tidak membebani pengguna dengan dyscalculia?
 - Apakah bahasa yang digunakan bebas dari stigma, stereotip, dan asumsi tentang "normal"?
 
 ### RASA
+
 - R — Apakah teks ini enak dibaca keras? Adakah bagian yang tersandung, berat, atau monoton?
 - A — Apakah setiap kata benar-benar tepat? Adakah kata yang hanya "mendekati" makna yang dimaksud?
 - S — Apakah setiap baris membawa bobot makna yang cukup? Atau ada yang panjang tapi kosong?
