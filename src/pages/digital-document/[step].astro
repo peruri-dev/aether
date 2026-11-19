@@ -1,0 +1,44 @@
+---
+import BaseLayout from '@/modules/common/components/base-layout.astro';
+import { PUBLIC_BRAND } from 'astro:env/client';
+
+import {
+  DigitalDocumentView,
+  parseStepParam,
+} from '@/modules/digital-document';
+
+// Halaman on-demand per langkah: URL kanonik pelajaran, mis. /digital-document/4.
+// Param divalidasi di server; langkah awal dioper sebagai props ke island agar
+// refresh tidak mengembalikan pelajar ke langkah pertama.
+const step = parseStepParam(Astro.params.step);
+if (step === null) {
+  return new Response(null, { status: 404, statusText: 'Not Found' });
+}
+---
+
+<BaseLayout
+  title="Alur tanda tangan digital dokumen | Aether"
+  className="min-h-dvh"
+>
+  <DigitalDocumentView
+    client:only="react"
+    brand={PUBLIC_BRAND}
+    initialStep={step}
+  >
+    <div
+      slot="fallback"
+      class="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-6"
+      aria-hidden="true"
+    >
+      <div class="flex items-center justify-between border-b border-stroke-primary pb-3">
+        <div class="relative h-8 w-40 overflow-hidden rounded-8 shimmer bg-background-tertiary"></div>
+        <div class="relative size-9 overflow-hidden rounded-8 shimmer bg-background-tertiary"></div>
+      </div>
+      <div class="grid items-start gap-4 lg:grid-cols-3">
+        <div class="relative h-96 overflow-hidden rounded-12 border border-stroke-primary shimmer bg-background-tertiary lg:col-span-2"></div>
+        <div class="relative h-96 overflow-hidden rounded-12 border border-stroke-primary shimmer bg-background-tertiary"></div>
+        <div class="relative h-14 overflow-hidden rounded-12 border border-stroke-primary shimmer bg-background-tertiary lg:col-span-3"></div>
+      </div>
+    </div>
+  </DigitalDocumentView>
+</BaseLayout>

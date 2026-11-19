@@ -1,0 +1,7 @@
+---
+import { buildDigitalDocumentStepUrl } from '@/modules/common/auth/route-permissions';
+
+// Root pelajaran menuju langkah pertama; URL kanonik per langkah ada di
+// [step].astro (ROUTES.digitalDocument/<langkah>).
+return Astro.redirect(buildDigitalDocumentStepUrl(1));
+---

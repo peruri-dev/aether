@@ -8,6 +8,7 @@ export const ROUTES = {
   accessDenied: '/access-denied',
   systemFlow: '/system-flow',
   dashbentLoginFlow: '/dashbent/login-flow',
+  digitalDocument: '/digital-document',
 } as const;
 
 /** Alasan redirect ke login, dibaca halaman login untuk menampilkan pesan. */
@@ -27,6 +28,11 @@ export function buildSystemFlowStepUrl(step: number): string {
 /** URL satu langkah pelajaran login Dashbent (1..10); langkah di URL path. */
 export function buildDashbentLoginStepUrl(step: number): string {
   return `${ROUTES.dashbentLoginFlow}/${step}`;
+}
+
+/** URL satu langkah pelajaran tanda tangan digital (1..11); langkah di URL path. */
+export function buildDigitalDocumentStepUrl(step: number): string {
+  return `${ROUTES.digitalDocument}/${step}`;
 }
 
 /** URL login yang membawa halaman asal (returnTo) dan alasan redirect. */

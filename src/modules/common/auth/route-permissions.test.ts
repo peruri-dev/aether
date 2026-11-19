@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   AUTH_REDIRECT_REASONS,
+  buildDigitalDocumentStepUrl,
   buildLoginUrl,
   buildSystemFlowStepUrl,
 } from './route-permissions';
@@ -10,6 +11,13 @@ describe('buildSystemFlowStepUrl', () => {
   it('menyusun path langkah pelajaran', () => {
     expect(buildSystemFlowStepUrl(1)).toBe('/system-flow/1');
     expect(buildSystemFlowStepUrl(3)).toBe('/system-flow/3');
+  });
+});
+
+describe('buildDigitalDocumentStepUrl', () => {
+  it('menyusun path langkah pelajaran', () => {
+    expect(buildDigitalDocumentStepUrl(1)).toBe('/digital-document/1');
+    expect(buildDigitalDocumentStepUrl(11)).toBe('/digital-document/11');
   });
 });
 
